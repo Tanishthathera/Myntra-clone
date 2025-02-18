@@ -1,41 +1,21 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
-
-const { getStoredItems, storeItems } = require("./data/items");
+const connectDB = require("./config/db");
+require("dotenv").config();
 
 const app = express();
 
+// ✅ Middleware
+app.use(cors());
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
+// ✅ Connect Database
+connectDB();
 
-app.get("/items", async (req, res) => {
-  const storedItems = await getStoredItems();
-  await new Promise((resolve, reject) => setTimeout(() => resolve(), 4000));
-  res.json({ items: storedItems });
-});
+// ✅ Routes
+app.use("/api/items", require("./routes/items"));
 
-app.get("/items/:id", async (req, res) => {
-  const storedItems = await getStoredItems();
-  const item = storedItems.find((item) => item.id === req.params.id);
-  res.json({ item });
-});
-
-app.post("/items", async (req, res) => {
-  const existingItems = await getStoredItems();
-  const itemData = req.body;
-  const newItem = {
-    ...itemData,
-    id: Math.random().toString(),
-  };
-  const updatedItems = [newItem, ...existingItems];
-  await storeItems(updatedItems);
-  res.status(201).json({ message: "Stored new item.", item: newItem });
-});
-
-app.listen(8080);
+// ✅ Server Listening
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
