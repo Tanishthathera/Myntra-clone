@@ -15,7 +15,7 @@ const FetchItems = () => {
 
     dispatch(fetchStatusActions.markFetchingStarted());
     fetch(
-      "https://myntra-clone-3ysrm455q-tanishthatheras-projects.vercel.app",
+      "https://myntra-clone-3ysrm455q-tanishthatheras-projects.vercel.app/api/items",
       { signal }
     )
       .then((res) => res.json())
