@@ -14,7 +14,10 @@ const FetchItems = () => {
     const signal = controller.signal;
 
     dispatch(fetchStatusActions.markFetchingStarted());
-    fetch("http://localhost:5000/api/items", { signal })
+    fetch(
+      "https://myntra-clone-3ysrm455q-tanishthatheras-projects.vercel.app",
+      { signal }
+    )
       .then((res) => res.json())
       .then(({ items }) => {
         dispatch(fetchStatusActions.markFetchDone());
