@@ -8,29 +8,50 @@ const FetchItems = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (fetchStatus.fetchDone) return;
+    if (fetchStatus.fetchDone) {
+      console.log("🚀 Data already fetched, skipping API call.");
+      return;
+    }
 
     const controller = new AbortController();
     const signal = controller.signal;
 
     dispatch(fetchStatusActions.markFetchingStarted());
+
     fetch(
       "https://myntra-clone-3ysrm455q-tanishthatheras-projects.vercel.app/api/items",
-      { mode: "cors", headers: { "Content-Type": "application/json" } }
+      {
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        signal: signal,
+      }
     )
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(({ items }) => {
+        if (!items || !Array.isArray(items)) {
+          throw new Error("Invalid data format received from API");
+        }
+
         dispatch(fetchStatusActions.markFetchDone());
         dispatch(fetchStatusActions.markFetchingFinished());
-        dispatch(itemsActions.addInitialItems(items[0]));
+        dispatch(itemsActions.addInitialItems(items));
+        console.log("✅ Data fetched successfully:", items);
+      })
+      .catch((error) => {
+        console.error("❌ Error fetching data:", error);
       });
 
     return () => {
       controller.abort();
     };
-  }, [fetchStatus]);
+  }, [fetchStatus, dispatch]);
 
-  return <></>;
+  return null;
 };
 
 export default FetchItems;
