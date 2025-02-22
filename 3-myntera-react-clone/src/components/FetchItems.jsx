@@ -16,23 +16,25 @@ const FetchItems = () => {
     const controller = new AbortController();
     const signal = controller.signal;
 
-    dispatch(fetchStatusActions.markFetchingStarted());
+    const fetchData = async () => {
+      try {
+        dispatch(fetchStatusActions.markFetchingStarted());
 
-    fetch(
-      "https://myntra-clone-3ysrm455q-tanishthatheras-projects.vercel.app/api/items",
-      {
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        signal: signal,
-      }
-    )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
+        const response = await fetch(
+          "https://myntra-clone-3ysrm455q-tanishthatheras-projects.vercel.app/api/items",
+          {
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            signal: signal,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return res.json();
-      })
-      .then(({ items }) => {
+
+        const { items } = await response.json();
+
         if (!items || !Array.isArray(items)) {
           throw new Error("Invalid data format received from API");
         }
@@ -40,16 +42,23 @@ const FetchItems = () => {
         dispatch(fetchStatusActions.markFetchDone());
         dispatch(fetchStatusActions.markFetchingFinished());
         dispatch(itemsActions.addInitialItems(items));
+
         console.log("✅ Data fetched successfully:", items);
-      })
-      .catch((error) => {
-        console.error("❌ Error fetching data:", error);
-      });
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.warn("⚠️ Fetch request was aborted.");
+        } else {
+          console.error("❌ Error fetching data:", error);
+        }
+      }
+    };
+
+    fetchData();
 
     return () => {
       controller.abort();
     };
-  }, [fetchStatus, dispatch]);
+  }, [fetchStatus.fetchDone, dispatch]); // ✅ Only runs when `fetchDone` changes
 
   return null;
 };
