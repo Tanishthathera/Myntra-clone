@@ -16,7 +16,7 @@ const FetchItems = () => {
     dispatch(fetchStatusActions.markFetchingStarted());
     fetch(
       "https://myntra-clone-3ysrm455q-tanishthatheras-projects.vercel.app/api/items",
-      { signal }
+      { mode: "cors", headers: { "Content-Type": "application/json" } }
     )
       .then((res) => res.json())
       .then(({ items }) => {

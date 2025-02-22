@@ -7,11 +7,14 @@ require("dotenv").config();
 const app = express();
 
 // ✅ Middleware
-app.use(cors({
-  origin: "https://myntra-clone-vcuc.vercel.app/", // frontend ka exact URL do
-  methods: ["GET", "POST", "DELETE"],
-  credentials: true // Agar authentication use ho rahi hai to
-}));
+app.use(
+  cors({
+    origin: "https://myntra-clone-vcuc.vercel.app/", // frontend ka exact URL do
+    methods: ["GET", "POST", "DELETE"],
+    credentials: true, // Agar authentication use ho rahi hai to
+    allowedHeaders: "Content-Type,Authorization",
+  })
+);
 app.use(bodyParser.json());
 
 // ✅ Connect Database
