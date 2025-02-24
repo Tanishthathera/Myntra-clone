@@ -21,7 +21,7 @@ const FetchItems = () => {
         dispatch(fetchStatusActions.markFetchingStarted());
 
         const response = await fetch(
-          "https://myntra-clone-3ysrm455q-tanishthatheras-projects.vercel.app/api/items",
+          "https://myntra--backend.vercel.app/api/items",
           {
             mode: "cors",
             headers: { "Content-Type": "application/json" },

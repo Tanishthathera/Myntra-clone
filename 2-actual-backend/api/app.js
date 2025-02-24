@@ -8,8 +8,8 @@ const app = express();
 
 // ✅ Allow Multiple Origins for Frontend & Backend
 const allowedOrigins = [
-  "https://myntra-clone-vjwf.vercel.app",
-  "https://myntra-clone-3ysrm455q-tanishthatheras-projects.vercel.app",
+  "https://myntra--frontend.vercel.app",
+  "https://myntra--backend.vercel.app/api/items",
 ];
 
 app.use(
