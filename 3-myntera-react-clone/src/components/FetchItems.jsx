@@ -8,7 +8,7 @@ const FetchItems = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (fetchStatus.fetchDone) {
+    if (fetchStatus?.fetchDone) {
       console.log("🚀 Data already fetched, skipping API call.");
       return;
     }
@@ -33,17 +33,17 @@ const FetchItems = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const { items } = await response.json();
+        const data = await response.json();
 
-        if (!items || !Array.isArray(items)) {
+        if (!data.items || !Array.isArray(data.items)) {
           throw new Error("Invalid data format received from API");
         }
 
         dispatch(fetchStatusActions.markFetchDone());
         dispatch(fetchStatusActions.markFetchingFinished());
-        dispatch(itemsActions.addInitialItems(items));
+        dispatch(itemsActions.addInitialItems(data.items));
 
-        console.log("✅ Data fetched successfully:", items);
+        console.log("✅ Data fetched successfully:", data.items);
       } catch (error) {
         if (error.name === "AbortError") {
           console.warn("⚠️ Fetch request was aborted.");
@@ -55,10 +55,13 @@ const FetchItems = () => {
 
     fetchData();
 
+    // Cleanup function to abort fetch on unmount
     return () => {
-      controller.abort();
+      if (!fetchStatus?.fetchDone) {
+        controller.abort();
+      }
     };
-  }, [fetchStatus.fetchDone, dispatch]); // ✅ Only runs when `fetchDone` changes
+  }, [fetchStatus?.fetchDone, dispatch]); // ✅ Depend only on `fetchDone`
 
   return null;
 };
