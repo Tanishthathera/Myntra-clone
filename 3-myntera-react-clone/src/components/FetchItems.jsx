@@ -33,15 +33,20 @@ const FetchItems = () => {
 
         const data = await response.json();
 
-        if (!data || !data.items || !Array.isArray(data.items)) {
+        console.log("📦 API Response:", data); // ✅ Debugging ke liye print karo
+
+        // ✅ Fix: Check for both formats (array or object with "items" key)
+        const itemsArray = Array.isArray(data) ? data : data.items;
+
+        if (!Array.isArray(itemsArray)) {
           throw new Error("Invalid data format received from API");
         }
 
         dispatch(fetchStatusActions.markFetchDone());
         dispatch(fetchStatusActions.markFetchingFinished());
-        dispatch(itemsActions.addInitialItems(data.items));
+        dispatch(itemsActions.addInitialItems(itemsArray));
 
-        console.log("✅ Data fetched successfully:", data.items);
+        console.log("✅ Data fetched successfully:", itemsArray);
       } catch (error) {
         if (error.name === "AbortError") {
           console.warn("⚠️ Fetch request was aborted.");
