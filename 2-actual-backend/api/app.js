@@ -6,45 +6,37 @@ require("dotenv").config();
 
 const app = express();
 
-// ✅ CORS Configuration - Fix for Vercel & Deployment
-const allowedOrigins = [
-  "https://myntra--frontend.vercel.app", // ✅ Frontend URL
-  "https://myntra--backend.vercel.app", // ✅ Backend URL
-];
-
+// ✅ Allow all requests temporarily to debug CORS issue
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS policy does not allow this origin!"));
-      }
-    },
-    methods: ["GET", "POST", "DELETE"],
-    credentials: true, // ✅ Required for authentication-related requests
+    origin: "*", // 🔥 Debugging ke liye sabhi origins allow kar do
+    methods: ["GET", "POST", "DELETE", "OPTIONS"], // ✅ OPTIONS request bhi allow karein
+    credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// ✅ Allow preflight requests for CORS
+app.options("*", cors());
 
 app.use(bodyParser.json());
 
 // ✅ Connect Database
 connectDB();
 
-// ✅ Debug Route - Backend is Live
+// ✅ API Routes
+app.use("/api/items", require("./routes/items"));
+
+// ✅ Debug Route
 app.get("/", (req, res) => {
   res.send("Myntra Backend is Live 🚀");
 });
 
-// ✅ API Routes
-app.use("/api/items", require("./routes/items"));
-
-// ✅ 404 Error Handling
+// ✅ 404 Handler
 app.use((req, res) => {
   res.status(404).json({ message: "404 - Not Found" });
 });
 
-// ✅ Server Listening
+// ✅ Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
