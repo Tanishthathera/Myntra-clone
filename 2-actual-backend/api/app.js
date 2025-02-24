@@ -6,10 +6,10 @@ require("dotenv").config();
 
 const app = express();
 
-// ✅ Allow Multiple Origins (Frontend & Backend)
+// ✅ CORS Configuration - Fix for Vercel & Deployment
 const allowedOrigins = [
-  "https://myntra--frontend.vercel.app", // ✅ Correct frontend URL
-  "https://myntra--backend.vercel.app", // ✅ Correct backend origin
+  "https://myntra--frontend.vercel.app", // ✅ Frontend URL
+  "https://myntra--backend.vercel.app", // ✅ Backend URL
 ];
 
 app.use(
@@ -22,8 +22,8 @@ app.use(
       }
     },
     methods: ["GET", "POST", "DELETE"],
-    credentials: true, // ✅ Important for authentication-related requests
-    allowedHeaders: "Content-Type,Authorization",
+    credentials: true, // ✅ Required for authentication-related requests
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -32,13 +32,18 @@ app.use(bodyParser.json());
 // ✅ Connect Database
 connectDB();
 
-// ✅ Fix 404 Error - Add Default Route
+// ✅ Debug Route - Backend is Live
 app.get("/", (req, res) => {
   res.send("Myntra Backend is Live 🚀");
 });
 
 // ✅ API Routes
 app.use("/api/items", require("./routes/items"));
+
+// ✅ 404 Error Handling
+app.use((req, res) => {
+  res.status(404).json({ message: "404 - Not Found" });
+});
 
 // ✅ Server Listening
 const PORT = process.env.PORT || 5000;
