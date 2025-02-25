@@ -6,15 +6,20 @@ import { AiFillDelete } from "react-icons/ai";
 const HomeItem = ({ item }) => {
   const dispatch = useDispatch();
   const bagItems = useSelector((store) => store.bag);
-  const elementFound = bagItems.indexOf(item.id) >= 0;
+
+  // ✅ Fix: Correct check for item existence in Redux
+  const elementFound = bagItems.some((bagItem) => bagItem === item.id);
+
   console.log(item.id, elementFound);
 
   const handleAddToBag = () => {
     dispatch(bagActions.aadToBag(item.id));
+    console.log("After Add:", bagItems);
   };
 
   const handleRemove = () => {
     dispatch(bagActions.removeFromBag(item.id));
+    console.log("After Remove:", bagItems);
   };
 
   return (
