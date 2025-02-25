@@ -15,6 +15,7 @@ header {
   align-items: center;
   border-bottom: 1px solid #b6b1b1;
   padding: 0 4%;
+  flex-wrap: wrap;
 }
 
 /* Myntra Logo */
@@ -25,8 +26,10 @@ header {
 /* Navigation Bar */
 .nav_bar {
   display: flex;
-  min-width: 500px;
-  justify-content: space-evenly;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  min-width: 300px;
 }
 
 .nav_bar a {
@@ -35,7 +38,7 @@ header {
   text-transform: uppercase;
   text-decoration: none;
   color: #282c3f;
-  padding: 28px 0;
+  padding: 20px 10px;
   border-bottom: 4px solid transparent;
   transition: border-bottom 0.3s ease-in-out;
 }
@@ -49,10 +52,12 @@ header {
   display: flex;
   align-items: center;
   height: 40px;
-  width: 30%;
+  width: 100%;
+  max-width: 400px;
   background-color: #f5f5f6;
   border-radius: 4px;
   padding: 0 10px;
+  margin-top: 10px;
 }
 
 .search_icon {
@@ -86,16 +91,15 @@ header {
 
 /* Product Grid */
 .items-container {
-  width: 80%;
+  width: 90%;
   margin: 40px auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
 }
 
 .item-container {
-  width: 250px;
-  margin: 10px;
+  width: 100%;
 }
 
 .item-image {
@@ -130,12 +134,16 @@ header {
   padding: 30px 0 40px;
   background: #FAFBFC;
   display: flex;
-  justify-content: space-evenly;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
 }
 
 .footer_column {
   display: flex;
   flex-direction: column;
+  min-width: 200px;
 }
 
 .footer_column h3 {
@@ -146,12 +154,13 @@ header {
 
 /* Cart Page */
 .bag-page {
-  width: 75%;
+  width: 90%;
   margin: 0 auto;
 }
 
 .bag-summary {
-  width: 35%;
+  width: 100%;
+  max-width: 400px;
   padding: 24px 16px;
 }
 
@@ -170,4 +179,26 @@ header {
 
 .btn-place-order:hover {
   background-color: #e60042;
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    height: auto;
+    padding: 10px 4%;
+  }
+
+  .nav_bar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .search_bar {
+    width: 90%;
+    margin-bottom: 10px;
+  }
+
+  .items-container {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
 }
