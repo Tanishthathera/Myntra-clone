@@ -6,7 +6,7 @@ const BagItem = ({ item }) => {
   const dispatch = useDispatch();
 
   const handleRemoveItem = () => {
-    dispatch(bagActions.removeFromBag(item.id));
+    dispatch(bagActions.removeFromBag(item._id));
   };
 
   return (

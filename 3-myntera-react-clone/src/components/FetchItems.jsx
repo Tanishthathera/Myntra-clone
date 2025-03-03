@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStatusActions } from "../store/fetchStatusSlice";
 import { itemsActions } from "../store/itemsSlice";
 
-const API_BASE_URL = "https://myntra--backend.vercel.app"; // ✅ Backend URL centralized
+const API_BASE_URL = "https://myntra--backend.vercel.app"; //  Backend URL
 
 const FetchItems = () => {
   const fetchStatus = useSelector((store) => store.fetchStatus);
@@ -32,11 +32,10 @@ const FetchItems = () => {
         }
 
         const data = await response.json();
+        console.log("📦 API Response:", data); // Debugging print
 
-        console.log("📦 API Response:", data); // ✅ Debugging ke liye print karo
-
-        // ✅ Fix: Check for both formats (array or object with "items" key)
-        const itemsArray = Array.isArray(data) ? data : data.items;
+        // Ensure the received data is in the expected format
+        const itemsArray = data?.items ?? data; // Handle both formats
 
         if (!Array.isArray(itemsArray)) {
           throw new Error("Invalid data format received from API");
@@ -52,6 +51,7 @@ const FetchItems = () => {
           console.warn("⚠️ Fetch request was aborted.");
         } else {
           console.error("❌ Error fetching data:", error);
+          dispatch(fetchStatusActions.markFetchingFinished()); // Ensure fetch is marked as finished
         }
       }
     };
@@ -59,7 +59,7 @@ const FetchItems = () => {
     fetchData();
 
     return () => {
-      controller.abort(); // ✅ Cleanup fetch request
+      controller.abort(); // Cleanup fetch request
     };
   }, [fetchStatus?.fetchDone, dispatch]);
 

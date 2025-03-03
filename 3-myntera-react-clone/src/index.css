@@ -116,15 +116,12 @@ header {
   max-width: 250px;
 }
 
-
 .footer_container {
-  padding: 30px 0;
+  padding: 30px 0px 40px 0px;
   background: #FAFBFC;
   display: flex;
-  flex-direction: row; /* Changed to row for footer alignment */
-  align-items: flex-start; /* Align items to the start */
+  justify-content: space-evenly;
 }
-
 
 .footer_column {
   display: flex;
@@ -133,7 +130,7 @@ header {
 
 .footer_column h3 {
   color: #282c3f;
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 25px;
 }
 
@@ -144,9 +141,13 @@ header {
   padding-bottom: 5px;
 }
 
+.footer_column a:hover {
+  color: #f54e77;
+}
+
 .copyright {
   color: #94969f;
-  text-align: end;
+  text-align: center; /* Center align */
   padding: 15px;
 }
 
@@ -386,7 +387,7 @@ a.action_container:link {
   width: 14px;
   height: 14px;
   cursor: pointer;
-  z-index: 10; /* Optional: ensure it appears above other elements */
+  z-index: 10; 
 }
 
 .spinner {

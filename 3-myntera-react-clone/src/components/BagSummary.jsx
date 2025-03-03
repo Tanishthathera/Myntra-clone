@@ -4,7 +4,7 @@ const BagSummary = () => {
   const bagItemIds = useSelector((state) => state.bag);
   const items = useSelector((state) => state.items);
   const finalItems = items.filter((item) => {
-    const itemIndex = bagItemIds.indexOf(item.id);
+    const itemIndex = bagItemIds.indexOf(item._id);
     return itemIndex >= 0;
   });
 

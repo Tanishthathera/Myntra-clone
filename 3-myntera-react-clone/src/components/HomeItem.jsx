@@ -7,24 +7,19 @@ const HomeItem = ({ item }) => {
   const dispatch = useDispatch();
   const bagItems = useSelector((store) => store.bag);
 
-  // ✅ Fix: Correct check for item existence in Redux
-  const elementFound = bagItems.some((bagItem) => bagItem === item.id);
-
-  console.log(item.id, elementFound);
+  const isItemInBag = bagItems.includes(item._id); // ✅ Ensure `_id` usage
 
   const handleAddToBag = () => {
-    dispatch(bagActions.aadToBag(item.id));
-    console.log("After Add:", bagItems);
+    dispatch(bagActions.addToBag(item._id)); // ✅ Use `_id`
   };
 
   const handleRemove = () => {
-    dispatch(bagActions.removeFromBag(item.id));
-    console.log("After Remove:", bagItems);
+    dispatch(bagActions.removeFromBag(item._id)); // ✅ Use `_id`
   };
 
   return (
     <div className="item-container">
-      <img className="item-image" src={item.image} alt="item image" />
+      <img className="item-image" src={item.image} alt="item" />
       <div className="rating">
         {item.rating.stars} ⭐ | {item.rating.count}
       </div>
@@ -36,20 +31,12 @@ const HomeItem = ({ item }) => {
         <span className="discount">({item.discount_percentage}% OFF)</span>
       </div>
 
-      {elementFound ? (
-        <button
-          type="button"
-          className="btn btn-add-bag btn-danger"
-          onClick={handleRemove}
-        >
+      {isItemInBag ? (
+        <button className="btn btn-danger" onClick={handleRemove}>
           <AiFillDelete /> Remove
         </button>
       ) : (
-        <button
-          type="button"
-          className="btn btn-add-bag btn-success"
-          onClick={handleAddToBag}
-        >
+        <button className="btn btn-success" onClick={handleAddToBag}>
           <MdAddCircleOutline /> Add to Bag
         </button>
       )}
