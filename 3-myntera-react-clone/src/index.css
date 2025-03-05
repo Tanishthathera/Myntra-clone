@@ -52,7 +52,19 @@ header {
   width: 30%;
   display: flex;
   align-items: center;
+  margin-right: 20px; /* Profile icon aur search bar ke beech extra space */
 }
+@media (max-width: 560px) {
+  /* Search bar neeche center me lana */
+  .search_bar {
+    width: 80%; /* Responsive width */
+    position: absolute;
+    top: 90px; /* Header ke neeche space dena */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10; /* Search bar ko upar rakhne ke liye */
+  }
+ }
 .search_icon {
   box-sizing: content-box;
   height: 20px;
@@ -74,10 +86,17 @@ header {
 
 .action_bar {
   display: flex;
-  min-width: 200px;
+  width: 350px;
   justify-content: space-evenly;
+  gap: 20px; /* Icons ke beech spacing */
+  align-items: center;
 }
-
+@media (max-width: 1340px) {
+  .search_bar {
+    width: 40%;  /* Search bar width adjust */
+    min-width: 250px; /* Minimum width set */
+  }
+}
 .action_container {
   display: flex;
   flex-direction: column;
@@ -393,3 +412,80 @@ a.action_container:link {
 .spinner {
   margin: 100px 0px;
 }
+
+
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Initially hidden */
+  width: 200px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent */
+  backdrop-filter: blur(10px); /* Blur effect */
+  transition: left 0.3s ease-in-out;
+  padding: 15px; /* Reduce extra spacing */
+}
+
+.sidebar.open {
+  left: 0; /* Slide in when open */
+}
+
+.toggle-sidebar {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+@media (max-width: 1002px) {
+  /* Toggle button ko logo ki jagah lana */
+  .toggle-sidebar {
+    display: block;
+    position: absolute;
+    left: 2%
+  }
+
+  /* Logo ko button ki jagah shift karna */
+  .logo_container {
+    position: absolute;
+    left: 20px /* Toggle button se thoda gap */
+  }
+
+ 
+}
+
+@media (min-width: 1003px) {
+  /* 1002px ke baad wapas original positioning */
+  .logo_container {
+    margin-left: 2%;
+    position: static;
+  }
+}
+
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.side-nav {
+ display: flex; 
+ flex-direction: column; 
+}
+.side-nav a {
+  text-decoration: none;
+  color: #282c3f;
+  font-weight: 600;
+  padding: 10px 15px;
+  display: block;
+}
+
+.side-nav a:hover {
+  border-bottom: none;
+}
+
