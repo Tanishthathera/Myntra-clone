@@ -18,9 +18,7 @@ header {
 .logo_container {
   margin-left: 4%;
 }
-.action_bar {
-  margin-right: 4%;
-}
+
 .nav_bar {
   display: flex;
   width: 100%;
@@ -53,6 +51,8 @@ header {
   display: flex;
   align-items: center;
   margin-right: 20px; /* Profile icon aur search bar ke beech extra space */
+  position: relative; /* Ensure it's above normal elements */
+  z-index: 5; /* Keep it above the default content but below the sidebar */
 }
 @media (max-width: 560px) {
   /* Search bar neeche center me lana */
@@ -65,6 +65,12 @@ header {
     z-index: 10; /* Search bar ko upar rakhne ke liye */
   }
  }
+ @media (max-width: 1340px) {
+  .search_bar {
+    width: 40%;  /* Search bar width adjust */
+    min-width: 250px; /* Minimum width set */
+  }
+}
 .search_icon {
   box-sizing: content-box;
   height: 20px;
@@ -86,21 +92,24 @@ header {
 
 .action_bar {
   display: flex;
-  width: 350px;
+  width: 250px;
   justify-content: space-evenly;
   gap: 20px; /* Icons ke beech spacing */
   align-items: center;
+  margin-right: 4%;
 }
-@media (max-width: 1340px) {
-  .search_bar {
-    width: 40%;  /* Search bar width adjust */
-    min-width: 250px; /* Minimum width set */
-  }
-}
+
 .action_container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative; /* Important for absolute positioning of .bag-item-count */
+} 
+.action_container {
+  text-decoration: none;
+}
+a.action_container:link {
+  color:black;
 }
 
 /* Main section */
@@ -252,46 +261,62 @@ header {
   line-height: 18px;
   padding: 0 6px;
   height: 18px;
-  position: relative;
+  position:absolute;
   border-radius: 50%;
   font-size: 12px;
   color: #fff;
   left: 13px;
-  top: -44px;
+  top: -8px;
   font-weight: 700;
   cursor: pointer;
-}
-.action_container {
-  text-decoration: none;
-}
-a.action_container:link {
-  color:black;
 }
 
 .bag-items-container {
   display: inline-block;
-  width: 100%;
-  max-width: 64%;
-  padding-right: 20px;
+  width: 65%;
+  max-width: 100%;
+  padding-right: 10px;
   border-right: 1px solid #eaeaec;
   padding-top: 32px;
   color: #282c3f;
   font-size: 13px;
   line-height: 1.42857143;
+  margin-top: 30px; /* Thoda extra space add karein */
 }
 
 .bag-page {
+  display: flex;
+  flex-direction: row; /* By default side-by-side layout */
+  justify-content: space-between;
+  align-items: flex-start;
   width: 100%;
   max-width: 75%;
   margin: 0 auto;
+}
+/* Small screens ke liye neeche lana */
+@media (max-width: 990px) {
+  .bag-page {
+    flex-direction: column; /* Column me shift karna */
+    align-items: center;
+  }
+
+  .bag-items-container,
+  .bag-summary {
+    width: 100%; /* Full width le lenge */
+    padding-right: 0px;
+  }
+
+  .bag-summary {
+    margin-top: 20px; /* Thoda gap dene ke liye */
+  }
 }
 
 .bag-summary {
   vertical-align: top;
   display: inline-block;
-  width: 100%;
-  max-width: 35%;
-  padding: 24px 0 0 16px;
+  width: 80%;
+  max-width: 100%;
+  padding: 64px 0 0 16px;
   color: #282c3f;
   font-size: 13px;
   line-height: 1.42857143;
@@ -353,6 +378,8 @@ a.action_container:link {
   border-radius: 4px;
   position: relative;
   padding: 12px 12px 0;
+  align-items: flex-start; /* Items ko sahi position me rakhein */
+  flex-wrap: nowrap; /* Small screen par bhi collapse na ho */
 }
 
 .item-left-part {
@@ -360,6 +387,7 @@ a.action_container:link {
   background: rgb(255, 242, 223);
   height: 148px;
   width: 111px;
+  flex-shrink: 0; /* Isko collapse hone se bachaye */
 }
 
 .item-right-part {
@@ -368,6 +396,7 @@ a.action_container:link {
   min-height: 148px;
   margin-left: 111px;
   margin-bottom: 12px;
+  flex-grow: 1; /* Available space le */
 }
 
 .bag-item-img {
@@ -402,11 +431,28 @@ a.action_container:link {
   position: absolute;
   font-size: 25px;
   top: 10px;
-  right: 18px;
-  width: 14px;
-  height: 14px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
   z-index: 10; 
+}
+/* Small screens ke liye */
+@media (max-width: 600px) {
+  .bag-item-container {
+    flex-direction: column; /* Column ki jagah row use karein */
+    
+  }
+
+  .item-left-part {
+    width: 80px; /* Small screen par size adjust karein */
+    height: auto;
+  }
+
+  .remove-from-cart {
+    right: 1px; /* Thoda adjust karein */
+    top: 1px;
+  }
 }
 
 .spinner {
@@ -425,10 +471,12 @@ a.action_container:link {
   backdrop-filter: blur(10px); /* Blur effect */
   transition: left 0.3s ease-in-out;
   padding: 15px; /* Reduce extra spacing */
+  z-index: 15; /* Higher than search_bar */
 }
 
 .sidebar.open {
   left: 0; /* Slide in when open */
+  z-index: 20; /* Ensure sidebar is on top */
 }
 
 .toggle-sidebar {
@@ -487,5 +535,4 @@ a.action_container:link {
 
 .side-nav a:hover {
   border-bottom: none;
-}
-
+} 
