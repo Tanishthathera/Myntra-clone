@@ -12,6 +12,9 @@ const bagSlice = createSlice({
     removeFromBag: (state, action) => {
       return state.filter((itemId) => itemId !== action.payload); // ✅ Correct filtering
     },
+    clearBag: () => {
+      return []; // 🔥 Yeh bag ko empty karega
+    },
   },
 });
 

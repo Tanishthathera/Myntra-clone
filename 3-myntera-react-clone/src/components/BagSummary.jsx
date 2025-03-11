@@ -1,17 +1,19 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { bagActions } from "../store/bagSlice";
 
 const BagSummary = () => {
+  const dispatch = useDispatch();
   const bagItemIds = useSelector((state) => state.bag);
   const items = useSelector((state) => state.items);
-  const finalItems = items.filter((item) => {
-    const itemIndex = bagItemIds.indexOf(item._id);
-    return itemIndex >= 0;
-  });
+  const [showPopup, setShowPopup] = useState(false);
+  const [showEmptyCartPopup, setShowEmptyCartPopup] = useState(false); // 🚀 Empty cart popup state
+
+  const finalItems = items.filter((item) => bagItemIds.includes(item._id));
 
   const CONVENIENCE_FEES = 99;
-  let totalItem = bagItemIds.length;
-  let totalMRP = 0;
-  let totalDiscount = 0;
+  let totalMRP = 0,
+    totalDiscount = 0;
 
   finalItems.forEach((bagItem) => {
     totalMRP += bagItem.original_price;
@@ -20,10 +22,30 @@ const BagSummary = () => {
 
   let finalPayment = totalMRP - totalDiscount + CONVENIENCE_FEES;
 
+  // Place Order Function with Cart Check
+  const handlePlaceOrder = () => {
+    if (bagItemIds.length === 0) {
+      setShowEmptyCartPopup(true); //  Show Empty Cart Popup
+      setTimeout(() => {
+        setShowEmptyCartPopup(false); // Hide after 2.5 sec
+      }, 2500);
+      return;
+    }
+
+    setShowPopup(true);
+    dispatch(bagActions.clearBag());
+
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 3000);
+  };
+
   return (
     <div className="bag-summary">
       <div className="bag-details-container">
-        <div className="price-header">PRICE DETAILS ({totalItem} Items)</div>
+        <div className="price-header">
+          PRICE DETAILS ({bagItemIds.length} Items)
+        </div>
         <div className="price-item">
           <span className="price-item-tag">Total MRP</span>
           <span className="price-item-value">₹{totalMRP}</span>
@@ -44,9 +66,29 @@ const BagSummary = () => {
           <span className="price-item-value">₹{finalPayment}</span>
         </div>
       </div>
-      <button className="btn-place-order">
+      <button className="btn-place-order" onClick={handlePlaceOrder}>
         <div className="css-xjhrni">PLACE ORDER</div>
       </button>
+
+      {/*  Order Placed Popup */}
+      {showPopup && (
+        <div className="popup success">
+          <div className="popup-content">
+            <span className="checkmark">✔</span>
+            <p>Your order has been placed successfully!</p>
+          </div>
+        </div>
+      )}
+
+      {/* Empty Cart Popup */}
+      {showEmptyCartPopup && (
+        <div className="popup error">
+          <div className="popup-content">
+            <span className="crossmark">✖</span>
+            <p>Your cart is empty! Please add items before placing an order.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -50,25 +50,25 @@ header {
   width: 30%;
   display: flex;
   align-items: center;
-  margin-right: 20px; /* Profile icon aur search bar ke beech extra space */
-  position: relative; /* Ensure it's above normal elements */
-  z-index: 5; /* Keep it above the default content but below the sidebar */
+  margin-right: 20px; 
+  position: relative; 
+  z-index: 5; 
 }
 @media (max-width: 560px) {
   /* Search bar neeche center me lana */
   .search_bar {
     width: 80%; /* Responsive width */
     position: absolute;
-    top: 90px; /* Header ke neeche space dena */
+    top: 90px; 
     left: 50%;
     transform: translateX(-50%);
-    z-index: 10; /* Search bar ko upar rakhne ke liye */
+    z-index: 10; 
   }
  }
  @media (max-width: 1340px) {
   .search_bar {
-    width: 40%;  /* Search bar width adjust */
-    min-width: 250px; /* Minimum width set */
+    width: 40%;  
+    min-width: 250px; 
   }
 }
 .search_icon {
@@ -94,7 +94,7 @@ header {
   display: flex;
   width: 250px;
   justify-content: space-evenly;
-  gap: 20px; /* Icons ke beech spacing */
+  gap: 20px;
   align-items: center;
   margin-right: 4%;
 }
@@ -103,7 +103,7 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative; /* Important for absolute positioning of .bag-item-count */
+  position: relative; 
 } 
 .action_container {
   text-decoration: none;
@@ -175,7 +175,7 @@ a.action_container:link {
 
 .copyright {
   color: #94969f;
-  text-align: center; /* Center align */
+  text-align: center; 
   padding: 15px;
 }
 
@@ -247,7 +247,7 @@ a.action_container:link {
   margin-top: 8px;
   font-size: 18px;
   width: 100%;
-  max-width: 200px; /* Optional: limit max width for better appearance */
+  max-width: 200px; 
   background-color: lightgreen;
   border: none;
   padding: 5px 15px;
@@ -281,12 +281,12 @@ a.action_container:link {
   color: #282c3f;
   font-size: 13px;
   line-height: 1.42857143;
-  margin-top: 30px; /* Thoda extra space add karein */
+  margin-top: 30px; 
 }
 
 .bag-page {
   display: flex;
-  flex-direction: row; /* By default side-by-side layout */
+  flex-direction: row; 
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
@@ -362,12 +362,15 @@ a.action_container:link {
   letter-spacing: 1px;
   font-size: 14px;
   font-weight: 600;
-  border-radius: 2px;
+  border-radius: 4px;
   border-width: 0px;
   padding: 10px 16px;
   background-color: rgb(255, 63, 108);
   color: rgb(255, 255, 255);
   cursor: pointer;
+}
+.btn-place-order:hover{
+  background-color: rgb(221, 56, 95);
 }
 
 .bag-item-container {
@@ -378,8 +381,8 @@ a.action_container:link {
   border-radius: 4px;
   position: relative;
   padding: 12px 12px 0;
-  align-items: flex-start; /* Items ko sahi position me rakhein */
-  flex-wrap: nowrap; /* Small screen par bhi collapse na ho */
+  align-items: flex-start; 
+  flex-wrap: nowrap; 
 }
 
 .item-left-part {
@@ -387,7 +390,7 @@ a.action_container:link {
   background: rgb(255, 242, 223);
   height: 148px;
   width: 111px;
-  flex-shrink: 0; /* Isko collapse hone se bachaye */
+  flex-shrink: 0; 
 }
 
 .item-right-part {
@@ -396,7 +399,7 @@ a.action_container:link {
   min-height: 148px;
   margin-left: 111px;
   margin-bottom: 12px;
-  flex-grow: 1; /* Available space le */
+  flex-grow: 1; 
 }
 
 .bag-item-img {
@@ -440,17 +443,17 @@ a.action_container:link {
 /* Small screens ke liye */
 @media (max-width: 600px) {
   .bag-item-container {
-    flex-direction: column; /* Column ki jagah row use karein */
+    flex-direction: column; 
     
   }
 
   .item-left-part {
-    width: 80px; /* Small screen par size adjust karein */
+    width: 80px;
     height: auto;
   }
 
   .remove-from-cart {
-    right: 1px; /* Thoda adjust karein */
+    right: 1px; 
     top: 1px;
   }
 }
@@ -464,19 +467,19 @@ a.action_container:link {
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px; /* Initially hidden */
+  left: -250px; 
   width: 200px;
   height: 100%;
-  background: rgba(255, 255, 255, 0.8); /* Semi-transparent */
-  backdrop-filter: blur(10px); /* Blur effect */
+  background: rgba(255, 255, 255, 0.8); 
+  backdrop-filter: blur(10px); 
   transition: left 0.3s ease-in-out;
-  padding: 15px; /* Reduce extra spacing */
-  z-index: 15; /* Higher than search_bar */
+  padding: 15px; 
+  z-index: 15; 
 }
 
 .sidebar.open {
-  left: 0; /* Slide in when open */
-  z-index: 20; /* Ensure sidebar is on top */
+  left: 0; 
+  z-index: 20; 
 }
 
 .toggle-sidebar {
@@ -486,24 +489,24 @@ a.action_container:link {
   cursor: pointer;
 }
 @media (max-width: 1002px) {
-  /* Toggle button ko logo ki jagah lana */
+  
   .toggle-sidebar {
     display: block;
     position: absolute;
     left: 2%
   }
 
-  /* Logo ko button ki jagah shift karna */
+  
   .logo_container {
     position: absolute;
-    left: 20px /* Toggle button se thoda gap */
+    left: 20px 
   }
 
  
 }
 
 @media (min-width: 1003px) {
-  /* 1002px ke baad wapas original positioning */
+ 
   .logo_container {
     margin-left: 2%;
     position: static;
@@ -536,3 +539,93 @@ a.action_container:link {
 .side-nav a:hover {
   border-bottom: none;
 } 
+
+/* Popup start */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(12px);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  animation: fadeIn 0.3s ease-in-out, fadeOut 0.3s ease-in-out 2.2s forwards;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.checkmark {
+  color: #4caf50;
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  animation: pop 0.4s ease-in-out;
+}
+
+.crossmark {
+  color: #ff4d4d;
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  animation: pop 0.4s ease-in-out;
+}
+
+.popup p {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+}
+
+/*  Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -55%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/*  Fade-out Animation */
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+/*  Pop Animation */
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/*  Responsive */
+@media (max-width: 500px) {
+  .popup {
+    width: 80%;
+    padding: 15px;
+  }
+}
+
