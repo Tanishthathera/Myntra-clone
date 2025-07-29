@@ -7,7 +7,8 @@ const BagSummary = () => {
   const bagItemIds = useSelector((state) => state.bag);
   const items = useSelector((state) => state.items);
   const [showPopup, setShowPopup] = useState(false);
-  const [showEmptyCartPopup, setShowEmptyCartPopup] = useState(false); // 🚀 Empty cart popup state
+  const [showEmptyCartPopup, setShowEmptyCartPopup] = useState(false);
+  const [showPaymentErrorPopup, setShowPaymentErrorPopup] = useState(false);
 
   const finalItems = items.filter((item) => bagItemIds.includes(item._id));
 
@@ -22,22 +23,116 @@ const BagSummary = () => {
 
   let finalPayment = totalMRP - totalDiscount + CONVENIENCE_FEES;
 
-  // Place Order Function with Cart Check
-  const handlePlaceOrder = () => {
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
+  const handlePlaceOrder = async () => {
     if (bagItemIds.length === 0) {
-      setShowEmptyCartPopup(true); //  Show Empty Cart Popup
+      setShowEmptyCartPopup(true);
       setTimeout(() => {
-        setShowEmptyCartPopup(false); // Hide after 2.5 sec
-      }, 2500);
+        setShowEmptyCartPopup(false);
+      }, 4500);
       return;
     }
 
-    setShowPopup(true);
-    dispatch(bagActions.clearBag());
+    const res = await loadRazorpayScript();
 
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 3000);
+    if (!res) {
+      alert("Razorpay SDK failed to load. Are you online?");
+      return;
+    }
+
+    try {
+      const orderResponse = await fetch("/api/orders/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: finalPayment,
+          receipt: `receipt_order_${new Date().getTime()}`,
+        }),
+      });
+
+      const orderData = await orderResponse.json();
+
+      if (!orderResponse.ok) {
+        alert(orderData.error || "Failed to create order");
+        return;
+      }
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "",
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Myntra Clone",
+        description: "Test Transaction",
+        order_id: orderData.id,
+        handler: async function (response) {
+          try {
+            const verifyResponse = await fetch("/api/orders/verify", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(response),
+            });
+
+            const verifyData = await verifyResponse.json();
+
+            if (verifyResponse.ok && verifyData.success) {
+              setShowPopup(true);
+              dispatch(bagActions.clearBag());
+              setTimeout(() => {
+                setShowPopup(false);
+              }, 5000);
+            } else {
+              setShowPaymentErrorPopup(true);
+              setTimeout(() => {
+                setShowPaymentErrorPopup(false);
+              }, 3000);
+            }
+          } catch (error) {
+            alert("Payment verification failed. Please try again.");
+            console.error("Payment verification error:", error);
+            setShowPaymentErrorPopup(true);
+            setTimeout(() => {
+              setShowPaymentErrorPopup(false);
+            }, 3000);
+          }
+        },
+        prefill: {
+          name: "",
+          email: "",
+          contact: "",
+        },
+        theme: {
+          color: "#F37254",
+        },
+      };
+
+      if (!options.key) {
+        alert("Razorpay key is missing. Please check your environment variables.");
+        return;
+      }
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      alert("Payment failed. Please try again.");
+      console.error("Payment error:", error);
+    }
   };
 
   return (
@@ -70,7 +165,6 @@ const BagSummary = () => {
         <div className="css-xjhrni">PLACE ORDER</div>
       </button>
 
-      {/*  Order Placed Popup */}
       {showPopup && (
         <div className="popup success">
           <div className="popup-content">
@@ -80,12 +174,20 @@ const BagSummary = () => {
         </div>
       )}
 
-      {/* Empty Cart Popup */}
       {showEmptyCartPopup && (
         <div className="popup error">
           <div className="popup-content">
             <span className="crossmark">✖</span>
             <p>Your cart is empty! Please add items before placing an order.</p>
+          </div>
+        </div>
+      )}
+
+      {showPaymentErrorPopup && (
+        <div className="popup error">
+          <div className="popup-content">
+            <span className="crossmark">✖</span>
+            <p>Payment verification failed. Please try again.</p>
           </div>
         </div>
       )}

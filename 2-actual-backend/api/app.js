@@ -24,8 +24,13 @@ app.use(bodyParser.json());
 // ✅ Connect Database
 connectDB();
 
+// Import routes
+const itemsRouter = require("./routes/items");
+const ordersRouter = require("./routes/orders");
+
 // ✅ API Routes
-app.use("/api/items", require("./routes/items"));
+app.use("/api/items", itemsRouter);
+app.use("/api/orders", ordersRouter);
 
 // ✅ Debug Route
 app.get("/", (req, res) => {
