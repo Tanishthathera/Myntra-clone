@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStatusActions } from "../store/fetchStatusSlice";
 import { itemsActions } from "../store/itemsSlice";
 
-const API_BASE_URL = "https://myntra--backend.vercel.app"; //  Backend URL
+const API_BASE_URL = "/api"; // Use relative path for proxy
 
 const FetchItems = () => {
   const fetchStatus = useSelector((store) => store.fetchStatus);
@@ -22,7 +22,7 @@ const FetchItems = () => {
       try {
         dispatch(fetchStatusActions.markFetchingStarted());
 
-        const response = await fetch(`${API_BASE_URL}/api/items`, {
+        const response = await fetch(`${API_BASE_URL}/items`, {
           headers: { "Content-Type": "application/json" },
           signal,
         });

@@ -54,7 +54,9 @@ const BagSummary = () => {
     }
 
     try {
-      const orderResponse = await fetch("/api/orders/create", {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
+
+      const orderResponse = await fetch(apiBaseUrl + "/api/orders/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +83,9 @@ const BagSummary = () => {
         order_id: orderData.id,
         handler: async function (response) {
           try {
-            const verifyResponse = await fetch("/api/orders/verify", {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
+
+            const verifyResponse = await fetch(apiBaseUrl + "/api/orders/verify", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -131,7 +135,12 @@ const BagSummary = () => {
       paymentObject.open();
     } catch (error) {
       alert("Payment failed. Please try again.");
-      console.error("Payment error:", error);
+      if (error instanceof Response) {
+        const errorData = await error.json();
+        console.error("Payment error response:", errorData);
+      } else {
+        console.error("Payment error:", error);
+      }
     }
   };
 

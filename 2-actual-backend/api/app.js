@@ -9,7 +9,7 @@ const app = express();
 // ✅ Allow all requests temporarily to debug CORS issue
 app.use(
   cors({
-    origin: "*", // 🔥 Debugging ke liye sabhi origins allow kar do
+    origin: "http://localhost:5173", // Allow only frontend origin
     methods: ["GET", "POST", "DELETE", "OPTIONS"], // ✅ OPTIONS request bhi allow karein
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -29,6 +29,7 @@ const itemsRouter = require("./routes/items");
 const ordersRouter = require("./routes/orders");
 
 // ✅ API Routes
+// app.use("/api/items", require("./routes/items"));
 app.use("/api/items", itemsRouter);
 app.use("/api/orders", ordersRouter);
 

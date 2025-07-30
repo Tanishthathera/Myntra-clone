@@ -15,6 +15,7 @@ router.post('/create', async (req, res) => {
     const { amount, currency = 'INR', receipt } = req.body;
 
     if (!amount || !receipt) {
+      console.error('Create order failed: Missing amount or receipt', req.body);
       return res.status(400).json({ error: 'Amount and receipt are required' });
     }
 
@@ -29,13 +30,18 @@ router.post('/create', async (req, res) => {
     res.json(order);
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
-    res.status(500).json({ error: 'Failed to create order' });
+    res.status(500).json({ error: 'Failed to create order', details: error.message });
   }
 });
 
 // Verify payment route
 router.post('/verify', (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    console.error('Verify payment failed: Missing parameters', req.body);
+    return res.status(400).json({ success: false, message: 'Missing payment verification parameters' });
+  }
 
   const generated_signature = crypto
     .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
@@ -46,6 +52,7 @@ router.post('/verify', (req, res) => {
     // Payment is verified
     res.json({ success: true, message: 'Payment verified successfully' });
   } else {
+    console.error('Payment verification failed: Signature mismatch', { generated_signature, razorpay_signature });
     res.status(400).json({ success: false, message: 'Payment verification failed' });
   }
 });
