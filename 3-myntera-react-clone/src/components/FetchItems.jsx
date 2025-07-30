@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStatusActions } from "../store/fetchStatusSlice";
 import { itemsActions } from "../store/itemsSlice";
 
-const API_BASE_URL = "/api"; // Use relative path for proxy
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api"; // Use env var or fallback to relative path
 
 const FetchItems = () => {
   const fetchStatus = useSelector((store) => store.fetchStatus);
