@@ -7,11 +7,10 @@ require("dotenv").config();
 const app = express();
  
  // ✅ Allow all requests temporarily to debug CORS issue
-const allowedOrigins = ["http://localhost:5173", "https://myntra-clone--frontend.vercel.app"];
+const allowedOrigins = ["http://localhost:5173", "https://myntra-clone--frontend.vercel.app", "https://myntra--backend.vercel.app"];
 
  app.use(
    cors({
-    origin: "http://localhost:5173", // Allow only frontend origin
     origin: function(origin, callback) {
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
