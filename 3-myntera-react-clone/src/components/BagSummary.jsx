@@ -37,6 +37,10 @@ const BagSummary = () => {
     });
   };
 
+  const API_BASE_URL = window.location.hostname === "localhost"
+    ? "http://localhost:5000/api"
+    : "https://myntra--backend.vercel.app/api";
+
   const handlePlaceOrder = async () => {
     if (bagItemIds.length === 0) {
       setShowEmptyCartPopup(true);
@@ -54,9 +58,7 @@ const BagSummary = () => {
     }
 
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
-
-      const orderResponse = await fetch(apiBaseUrl + "/orders/create", {
+      const orderResponse = await fetch(API_BASE_URL + "/orders/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,9 +85,7 @@ const BagSummary = () => {
         order_id: orderData.id,
         handler: async function (response) {
           try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
-
-            const verifyResponse = await fetch(apiBaseUrl + "/orders/verify", {
+            const verifyResponse = await fetch(API_BASE_URL + "/orders/verify", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

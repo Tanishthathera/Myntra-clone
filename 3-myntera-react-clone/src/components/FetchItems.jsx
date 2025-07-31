@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStatusActions } from "../store/fetchStatusSlice";
 import { itemsActions } from "../store/itemsSlice";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api"; // Use env var or fallback to relative path
+const API_BASE_URL = window.location.hostname === "localhost"
+  ? "http://localhost:5000/api"
+  : "https://myntra--backend.vercel.app/api";
 
 const FetchItems = () => {
   const fetchStatus = useSelector((store) => store.fetchStatus);
