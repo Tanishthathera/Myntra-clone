@@ -56,7 +56,7 @@ const BagSummary = () => {
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
 
-      const orderResponse = await fetch(apiBaseUrl + "/api/orders/create", {
+      const orderResponse = await fetch(apiBaseUrl + "/orders/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +85,7 @@ const BagSummary = () => {
           try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
 
-            const verifyResponse = await fetch(apiBaseUrl + "/api/orders/verify", {
+            const verifyResponse = await fetch(apiBaseUrl + "/orders/verify", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -122,7 +122,7 @@ const BagSummary = () => {
           contact: "",
         },
         theme: {
-          color: "#F37254",
+          color: "#e57a62ff",
         },
       };
 

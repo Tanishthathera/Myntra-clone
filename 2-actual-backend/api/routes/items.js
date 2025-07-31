@@ -8,7 +8,8 @@ router.get("/", async (req, res) => {
     const items = await Item.find();
     res.json(items);
   } catch (error) {
-    res.status(500).json({ message: "❌ Server Error" });
+    console.error("Error fetching items:", error);
+    res.status(500).json({ message: "❌ Server Error", error: error.message });
   }
 });
 

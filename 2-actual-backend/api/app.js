@@ -5,16 +5,24 @@ const connectDB = require("./config/db");
 require("dotenv").config();
 
 const app = express();
+ 
+ // ✅ Allow all requests temporarily to debug CORS issue
+const allowedOrigins = ["http://localhost:5173", "https://myntra-clone--frontend.vercel.app"];
 
-// ✅ Allow all requests temporarily to debug CORS issue
-app.use(
-  cors({
+ app.use(
+   cors({
     origin: "http://localhost:5173", // Allow only frontend origin
-    methods: ["GET", "POST", "DELETE", "OPTIONS"], // ✅ OPTIONS request bhi allow karein
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+    origin: function(origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+     methods: ["GET", "POST", "DELETE", "OPTIONS"], // ✅ OPTIONS request bhi allow karein
+     credentials: true,
+     allowedHeaders: ["Content-Type", "Authorization"],
+   }));
 
 // ✅ Allow preflight requests for CORS
 app.options("*", cors());
@@ -29,7 +37,6 @@ const itemsRouter = require("./routes/items");
 const ordersRouter = require("./routes/orders");
 
 // ✅ API Routes
-// app.use("/api/items", require("./routes/items"));
 app.use("/api/items", itemsRouter);
 app.use("/api/orders", ordersRouter);
 
