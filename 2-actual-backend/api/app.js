@@ -26,6 +26,14 @@ const allowedOrigins = ["http://localhost:5173", "https://myntra-clone--frontend
      allowedHeaders: ["Content-Type", "Authorization"],
    }));
 
+// Add permissive CORS for /api/items routes to fix intermittent CORS errors
+app.use('/api/items', cors({
+  origin: true,
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
 // ✅ Allow preflight requests for CORS
 app.options("*", cors());
 
