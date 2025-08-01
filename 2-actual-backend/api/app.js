@@ -5,28 +5,26 @@ const connectDB = require("./config/db");
 require("dotenv").config();
 
 const app = express();
- 
- // ✅ Allow all requests temporarily to debug CORS issue
+
 const allowedOrigins = ["http://localhost:5173", "https://myntra-clone--frontend.vercel.app", "https://myntra--backend.vercel.app"];
 
- app.use(
-   cors({
-    origin: function(origin, callback) {
-      console.log("CORS Origin:", origin);
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        console.error("CORS Rejected Origin:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    // origin: true,  Temporarily allow all origins for debugging CORS issues
-     methods: ["GET", "POST", "DELETE", "OPTIONS"], // ✅ OPTIONS request bhi allow karein
-     credentials: true,
-     allowedHeaders: ["Content-Type", "Authorization"],
-   }));
+// Apply whitelist CORS only to /api/orders routes
+app.use('/api/orders', cors({
+  origin: function(origin, callback) {
+    console.log("CORS Origin:", origin);
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.error("CORS Rejected Origin:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
-// Add permissive CORS for /api/items routes to fix intermittent CORS errors
+// Apply permissive CORS to /api/items routes
 app.use('/api/items', cors({
   origin: true,
   methods: ["GET", "POST", "DELETE", "OPTIONS"],
