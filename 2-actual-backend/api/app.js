@@ -11,10 +11,19 @@ const allowedOrigins = ["http://localhost:5173", "https://myntra-clone--frontend
 
  app.use(
    cors({
-    origin: true, // Temporarily allow all origins for debugging CORS issues
-    methods: ["GET", "POST", "DELETE", "OPTIONS"], // ✅ OPTIONS request bhi allow karein
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
+    // origin: function(origin, callback) {
+    //   console.log("CORS Origin:", origin);
+    //   if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    //     callback(null, true);
+    //   } else {
+    //     console.error("CORS Rejected Origin:", origin);
+    //     callback(new Error("Not allowed by CORS"));
+    //   }
+    // },
+     origin: true, // Temporarily allow all origins for debugging CORS issues
+     methods: ["GET", "POST", "DELETE", "OPTIONS"], // ✅ OPTIONS request bhi allow karein
+     credentials: true,
+     allowedHeaders: ["Content-Type", "Authorization"],
    }));
 
 // ✅ Allow preflight requests for CORS
