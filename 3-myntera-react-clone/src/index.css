@@ -629,3 +629,44 @@ a.action_container:link {
   }
 }
 
+.stock-low {
+    color: #ff3f6c;
+    font-weight: 700;
+    font-size: 12px;
+}
+.stock-available {
+    color: #03a685;
+    font-size: 12px;
+}
+.stock-out {
+    color: red;
+    font-weight: bold;
+}
+
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  gap: 15px;
+}
+
+.qty-btn {
+  background-color: #f5f5f6;
+  border: 1px solid #d1d1d1;
+  padding: 2px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.qty-btn:hover {
+  background-color: #e2e2e2;
+}
+
+.qty-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #282c3f;
+}

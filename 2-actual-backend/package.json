@@ -4,19 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node api/app.js",
-    "dev": "nodemon api/app.js"
+    "start": "concurrently \"node api/app.js\" \"node worker.js\"",
+    "dev": "concurrently \"nodemon api/app.js\" \"nodemon worker.js\"",
+    "sync": "node sync-redis.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.3",
+    "bullmq": "^5.70.1",
+    "concurrently": "^9.2.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.10.1",
-    "razorpay": "^2.9.6"
+    "razorpay": "^2.9.6",
+    "redis": "^5.11.0",
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

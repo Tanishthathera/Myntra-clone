@@ -1,21 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const bagSlice = createSlice({
-  name: "bag",
-  initialState: [],
+  name: 'bag',
+  initialState: [], // Ab ye [{id: '123', quantity: 1}] aisa dikhega
   reducers: {
     addToBag: (state, action) => {
-      if (!state.includes(action.payload)) {
-        state.push(action.payload); // ✅ Ensure unique `_id` is stored
+      const itemIndex = state.findIndex(item => item.id === action.payload);
+      if (itemIndex >= 0) {
+        // Agar pehle se hai toh quantity badhao
+        state[itemIndex].quantity += 1;
+      } else {
+        // Naya hai toh add karo
+        state.push({ id: action.payload, quantity: 1 });
       }
     },
     removeFromBag: (state, action) => {
-      return state.filter((itemId) => itemId !== action.payload); // ✅ Correct filtering
+      return state.filter(item => item.id !== action.payload);
+    },
+    // Ek specific quantity kam karne ke liye
+    decreaseQuantity: (state, action) => {
+      const itemIndex = state.findIndex(item => item.id === action.payload);
+      if (state[itemIndex].quantity > 1) {
+        state[itemIndex].quantity -= 1;
+      } else {
+        return state.filter(item => item.id !== action.payload);
+      }
     },
     clearBag: () => {
-      return []; // 🔥 Yeh bag ko empty karega
-    },
-  },
+      return [];
+    }
+  }
 });
 
 export const bagActions = bagSlice.actions;

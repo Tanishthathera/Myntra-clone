@@ -7,14 +7,15 @@ const HomeItem = ({ item }) => {
   const dispatch = useDispatch();
   const bagItems = useSelector((store) => store.bag);
 
-  const isItemInBag = bagItems.includes(item._id); // ✅ Ensure `_id` usage
+  // Check if any object in the bag has this item's ID
+  const isItemInBag = bagItems.some((bagItem) => bagItem.id === item._id);
 
   const handleAddToBag = () => {
-    dispatch(bagActions.addToBag(item._id)); // ✅ Use `_id`
+    dispatch(bagActions.addToBag(item._id));
   };
 
   const handleRemove = () => {
-    dispatch(bagActions.removeFromBag(item._id)); // ✅ Use `_id`
+    dispatch(bagActions.removeFromBag(item._id));
   };
 
   return (
@@ -25,6 +26,19 @@ const HomeItem = ({ item }) => {
       </div>
       <div className="company-name">{item.company}</div>
       <div className="item-name">{item.item_name}</div>
+      
+      <div className="stock-info">
+        {item.currentStock > 0 ? (
+          item.currentStock <= 10 ? (
+            <span className="stock-low">Only {item.currentStock} left! Hurry!</span>
+          ) : (
+            <span className="stock-available">In Stock: {item.currentStock}</span>
+          )
+        ) : (
+          <span className="stock-out">Sold Out</span>
+        )}
+      </div>
+
       <div className="price">
         <span className="current-price">Rs {item.current_price}</span>
         <span className="original-price">Rs {item.original_price}</span>
@@ -32,12 +46,16 @@ const HomeItem = ({ item }) => {
       </div>
 
       {isItemInBag ? (
-        <button className="btn btn-danger" onClick={handleRemove}>
+        <button className="btn-add-bag btn-remove-bag" onClick={handleRemove}>
           <AiFillDelete /> Remove
         </button>
       ) : (
-        <button className="btn btn-success" onClick={handleAddToBag}>
-          <MdAddCircleOutline /> Add to Bag
+        <button 
+          className="btn-add-bag" 
+          onClick={handleAddToBag}
+          disabled={item.currentStock <= 0} // Sold out ho toh button band
+        >
+          <MdAddCircleOutline /> {item.currentStock <= 0 ? "Sold Out" : "Add to Bag"}
         </button>
       )}
     </div>

@@ -82,7 +82,9 @@ const Header = () => {
         <Link className="action_container" to="/bag">
           <FaShoppingBag />
           <span className="action_name">Bag</span>
-          <span className="bag-item-count">{bag.length}</span>
+          <span className="bag-item-count">
+          {bag.reduce((total, item) => total + item.quantity, 0)}
+          </span>
         </Link>
       </div>
     </header>

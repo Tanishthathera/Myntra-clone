@@ -13,6 +13,7 @@ const itemSchema = new mongoose.Schema({
     stars: Number,
     count: Number,
   },
+  stock: {type: Number, default: 100 },
 });
 
 const Item = mongoose.model("Item", itemSchema);
