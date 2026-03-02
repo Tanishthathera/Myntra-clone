@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
         return { 
           ...item._doc, 
           // Agar Redis mein data nahi hai, toh default 50 dikhao (testing ke liye)
-          currentStock: stock !== null ? parseInt(stock) : 50 
+          currentStock: stock !== null ? parseInt(stock) : 0 
         };
       } catch (redisErr) {
         console.error(`Error fetching stock for ${item._id}:`, redisErr);
