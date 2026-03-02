@@ -71,25 +71,16 @@ const connectDB = require("./config/db");
 require("dotenv").config();
 
 const app = express();
-const allowedOrigins = [
-  'https://myntra-clone--frontend.vercel.app',
-  'http://localhost:5173', // Local testing ke liye
-];
+
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Agar origin list mein hai ya fir origin null hai (jaise mobile apps/server calls)
-    if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: ["https://myntra-clone--frontend.vercel.app", "http://localhost:5173"],
   methods: ["GET", "POST", "DELETE", "OPTIONS"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+app.options("*", cors());
 app.use(bodyParser.json());
 
 // Connect Database
