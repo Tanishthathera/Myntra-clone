@@ -2,6 +2,7 @@ const { Worker } = require('bullmq');
 const mongoose = require('mongoose');
 const Item = require('./api/models/Item'); 
 require('dotenv').config();
+const Order = require('./api/models/Order');
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -21,6 +22,15 @@ const worker = new Worker('myntraOrderQueue', async (job) => {
     console.log(` Processing Order: ${job.data.orderId}`);
 
     try {
+        const newOrder = new Order({
+            orderId: job.data.orderId,
+            paymentId: job.data.paymentId,
+            items: job.data.items,
+            totalAmount: job.data.totalAmount
+        });
+        await newOrder.save();
+        console.log(`Order Details saved to DB ${job.data.orderId}`);
+
         for (const item of job.data.items) {
             // MongoDB mein stock kam karna (Atomic decrement)
             await Item.findByIdAndUpdate(item.id, { $inc: { stock: -item.quantity } });
