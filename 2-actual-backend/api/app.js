@@ -71,8 +71,6 @@ const connectDB = require("./config/db");
 require("dotenv").config();
 
 const app = express();
-const cors = require('cors');
-
 const allowedOrigins = [
   'https://myntra-clone--frontend.vercel.app',
   'http://localhost:5173', // Local testing ke liye
