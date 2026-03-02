@@ -108,23 +108,25 @@ const razorpay = new Razorpay({
 // Redis Connection & Queue Setup
 
 const redisUrl = process.env.REDIS_URL;
-const isCloud = !!redisUrl;
+const isRediss = redisUrl && redisUrl.startsWith('rediss');
 
 const redisClient = redis.createClient({
-url: isCloud ? redisUrl : 'redis://localhost:6379',
-socket: isCloud ? {
-tls: true,
-rejectUnauthorized: false
-} : {}
+url: redisUrl,
+socket:{
+tls: isRediss ? true : undefined,
+rejectUnauthorized: false,
+connectTimeout: 10000
+}
 });
 
 redisClient.on('error', (err) => console.log('Redis Error:', err));
 
 redisClient.connect().then(() => {
-console.log(isCloud ? "Connected to UPSTASH (Cloud)" : "Connected to LOCALHOST (Memurai)");
-});
+console.log(isRediss ? "Connected to UPSTASH (Cloud)" : "Connected to LOCALHOST (Memurai)");
+})
+.catch(err => console.error("REDIS FAIL:", err));
 
-const queueConnection = isCloud
+const queueConnection = isRediss
 ? { url: redisUrl, socket: { tls: true, rejectUnauthorized: false } }
 : { host: 'localhost', port: 6379 };
 
