@@ -86,20 +86,62 @@ const Header = () => {
           <IoMdPerson />
           <span className="action_name">Profile</span>
           <div className="profile_dropdown">
-            {user ? (
-              <>
-                <p>Welcome, <strong>{user.name}</strong></p>
-                <hr />
-                <Link to="/page/orders">Orders</Link>
-                <span onClick={handleLogout} style={{ color: '#ff3f6c', cursor: 'pointer' }}>Logout</span>
-              </>
-            ) : (
-              <>
-                <p>Welcome</p>
-                <Link to="/login" className="btn_login">LOGIN / SIGNUP</Link>
-              </>
-            )}
-          </div>
+  {user ? (
+    <>
+      {/* User Name aur Email Section */}
+      <div style={{ padding: '10px 5px' }}>
+        <p style={{ margin: 0, fontSize: '14px', fontWeight: '700', color: '#282c3f' }}>
+          Hello <span style={{ color: '#ff3f6c', textTransform: 'capitalize' }}>{user.name}</span>
+        </p>
+        <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#686b78' }}>{user.email || 'Welcome to Myntra'}</p>
+      </div>
+
+      <hr style={{ border: '0', borderTop: '1px solid #f5f5f6', margin: '10px 0' }} />
+
+      {/* Links Section - Yahan vertical spacing add ki hai */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <Link 
+          to="/page/orders" 
+          style={{ textDecoration: 'none', color: '#3e4152', fontSize: '14px', fontWeight: '400' }}
+          onMouseOver={(e) => e.target.style.fontWeight = '700'}
+          onMouseOut={(e) => e.target.style.fontWeight = '400'}
+        >
+          Orders
+        </Link>
+        
+        <span 
+          onClick={handleLogout} 
+          style={{ 
+            color: '#ff3f6c', 
+            fontSize: '14px', 
+            fontWeight: '700', 
+            cursor: 'pointer',
+            marginTop: '5px' 
+          }}
+        >
+          Logout
+        </span>
+      </div>
+    </>
+  ) : (
+    <>
+      <p style={{ fontWeight: '700', fontSize: '14px' }}>Welcome</p>
+      <p style={{ fontSize: '12px', color: '#686b78' }}>To access account and manage orders</p>
+      <Link to="/login" className="btn_login" style={{ 
+        display: 'inline-block', 
+        marginTop: '10px', 
+        padding: '10px', 
+        border: '1px solid #eaeaec', 
+        color: '#ff3f6c', 
+        fontWeight: '700', 
+        textDecoration: 'none',
+        textAlign: 'center'
+      }}>
+        LOGIN / SIGNUP
+      </Link>
+    </>
+  )}
+</div>
         </div>
 
         <Link className="action_container" to="/wishlist">
