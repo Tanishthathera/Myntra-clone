@@ -58,7 +58,7 @@ const BagSummary = () => {
 
   const handlePlaceOrder = async () => {
     if (bagItems.length === 0) {
-      toast.error("Cart is Empty!", toastStyle); // 👈 Stylish Empty Cart
+      toast.error("Cart is Empty!", toastStyle); 
       return;
     }
 
@@ -77,7 +77,7 @@ const BagSummary = () => {
       
       const stockData = await checkStockRes.json();
       if (!stockData.success) {
-        toast.error(stockData.message, toastStyle); // 👈 Stylish Stock Out (Jo aapko chahiye tha)
+        toast.error(stockData.message, toastStyle); 
         return;
       }
     } catch (err) {
@@ -136,7 +136,7 @@ const BagSummary = () => {
               toast.success("Order Placed Successfully!", {
                 duration: 3000,
                 style: { background: '#4BB543', color: '#fff' }
-              }); // 👈 Stylish Success
+              }); 
               dispatch(bagActions.clearBag());
               setTimeout(() => { window.location.reload(); }, 2000);
             } else {

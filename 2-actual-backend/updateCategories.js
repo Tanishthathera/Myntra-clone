@@ -11,33 +11,34 @@ async function runUpdate() {
       return;
     }
 
-    // --- YE LINE ADD KI HAI ---
     await client.connect(); 
     console.log(" Connected To Atlas Cloud...");
 
-    const db = client.db("myDatabase"); 
+    // Database aur Collection name check kar lena (Myntra ya myDatabase)
+    const db = client.db("test"); // Agar aapka DB 'test' hai toh wahi rakhein
     const collection = db.collection("items"); 
 
     const items = await collection.find({}).toArray();
-    console.log(`Found ${items.length} items on Atlas.`);
+    console.log(` Found ${items.length} items on Atlas.`);
 
     if (items.length === 0) {
-      console.log("No Ishue Detected");
+      console.log(" No items found in the collection.");
       return;
     }
 
     for (let item of items) {
-      let cat = "Men"; 
+      let cat = "Men"; // Default Category
       const name = (item.item_name || "").toLowerCase();
 
-      if (name.includes("women") || name.includes("dress") || name.includes("studs") || name.includes("earrings")) {
+      // Logic for Category Mapping
+      if (name.includes("women") || name.includes("dress") || name.includes("studs") || name.includes("earrings") || name.includes("kurta")) {
         cat = "Women";
       } else if (name.includes("kids") || name.includes("boy") || name.includes("girl") || name.includes("toy") || name.includes("toddler")) {
         cat = "Kids";
-      } else if (name.includes("deodrant") || name.includes("perfume") || name.includes("lipstick") || name.includes("makeup")|| name.includes("cream")) {
+      } else if (name.includes("deodrant") || name.includes("perfume") || name.includes("lipstick") || name.includes("makeup") || name.includes("cream")) {
         cat = "Beauty";
-      } else if (name.includes("curtain") || name.includes("bedsheet") || name.includes("towel") || name.includes("cushion") || name.includes("storage") || name.includes("lamp") || name.includes("bottle")) {
-        cat = "Home & living";
+      } else if (name.includes("curtain") || name.includes("bedsheet") || name.includes("towel") || name.includes("cushion") || name.includes("storage") || name.includes("lamp") || name.includes("bottle") || name.includes("clock")) {
+        cat = "Home & Living";
       } else if (name.includes("trending")) {
         cat = "Studio"; 
       }
@@ -46,12 +47,17 @@ async function runUpdate() {
         { _id: item._id },
         { $set: { category: cat } }
       );
-      console.log(`Updated: ${item.item_name} -> ${cat}`);
+      console.log(` Updated: ${item.item_name} -> ${cat}`);
     }
 
-    console.error(" Error:", err.message);
+    console.log(" All items updated successfully!");
+
+  } catch (err) {
+    // Catch block add kiya taaki error handling sahi ho
+    console.error(" Error during update:", err.message);
   } finally {
     await client.close();
+    console.log(" Connection closed.");
     process.exit();
   }
 }

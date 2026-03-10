@@ -16,10 +16,19 @@ const AdminAddProduct = () => {
 
   const ADMIN_PIN = "12344";
 
+  // --- Dynamic API URL Logic ---
+  const API_BASE_URL = window.location.hostname === "localhost"
+    ? "http://localhost:5000/api"
+    : "https://myntra--backend.vercel.app/api";
+
   const fetchItems = async () => {
-    const res = await fetch("http://localhost:5000/api/items");
-    const data = await res.json();
-    setAllItems(data);
+    try {
+      const res = await fetch(`${API_BASE_URL}/items`);
+      const data = await res.json();
+      setAllItems(data);
+    } catch (err) {
+      console.error("Fetch Error:", err);
+    }
   };
 
   useEffect(() => { 
@@ -36,10 +45,9 @@ const AdminAddProduct = () => {
     }
   };
 
-  // --- YE RHA LOGOUT LOGIC JO SAB EMPTY KAR DEGA ---
   const handleLogout = () => {
     setIsAdmin(false); 
-    setPin("");        
+    setPin("");         
     setProduct({       
       item_name: "", 
       company: "", 
@@ -54,7 +62,7 @@ const AdminAddProduct = () => {
     e.preventDefault();
     const discount = Math.round(((product.original_price - product.current_price) / product.original_price) * 100);
 
-    const res = await fetch("http://localhost:5000/api/items", {
+    const res = await fetch(`${API_BASE_URL}/items`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
@@ -74,9 +82,9 @@ const AdminAddProduct = () => {
   };
 
   const handleDelete = async (id) => {
-    if (confirm("Are you sure you want to delete this item?")) {
-      await fetch(`http://localhost:5000/api/items/${id}`, { method: "DELETE" });
-      fetchItems();
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      const res = await fetch(`${API_BASE_URL}/items/${id}`, { method: "DELETE" });
+      if (res.ok) fetchItems();
     }
   };
 
@@ -110,7 +118,6 @@ const AdminAddProduct = () => {
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Admin Dashboard (Myntra Clone)</h2>
-        {/* LOGOUT BUTTON ME NAYA FUNCTION CALL KIYA HAI */}
         <button className="btn btn-outline-dark" onClick={handleLogout}>Logout</button>
       </div>
       

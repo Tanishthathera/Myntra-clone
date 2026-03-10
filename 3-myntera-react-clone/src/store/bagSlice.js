@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const bagSlice = createSlice({
   name: 'bag',
-  initialState: [], // Ab ye [{id: '123', quantity: 1}] aisa dikhega
+  initialState: [], 
   reducers: {
     addToBag: (state, action) => {
       const itemIndex = state.findIndex(item => item.id === action.payload);

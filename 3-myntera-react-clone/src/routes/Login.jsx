@@ -8,28 +8,35 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await fetch("http://localhost:5000/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+  // --- Dynamic API URL Logic ---
+  const API_BASE_URL = window.location.hostname === "localhost"
+    ? "http://localhost:5000/api"
+    : "https://myntra--backend.vercel.app/api";
 
-    if (res.ok) {
-      const data = await res.json();
-      dispatch(userActions.loginUser(data.user));
-      localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/");
-    } else {
-      alert("Backend route nahi mila (404)! Pehle backend update karein.");
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      // Hardcoded localhost ko replace kiya API_BASE_URL se
+      const res = await fetch(`${API_BASE_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        dispatch(userActions.loginUser(data.user));
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/");
+      } else {
+        const errorData = await res.json();
+        alert(errorData.message || "Login failed! Please check your credentials.");
+      }
+    } catch (error) {
+      console.error("Connection error:", error);
+      alert("Server is not responding. Please check if backend is live.");
     }
-  } catch (error) {
-    console.error("Connection error:", error);
-    alert("Server band hai ya connect nahi ho raha.");
-  }
-};
+  };
 
   return (
     <main className="container d-flex justify-content-center align-items-center" style={{ minHeight: "70vh" }}>

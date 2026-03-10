@@ -9,6 +9,11 @@ const CategoryPage = () => {
   const [categoryItems, setCategoryItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // --- Dynamic API URL Logic ---
+  const API_BASE_URL = window.location.hostname === "localhost"
+    ? "http://localhost:5000/api"
+    : "https://myntra--backend.vercel.app/api";
+
   useEffect(() => {
     setLoading(true);
     
@@ -17,11 +22,12 @@ const CategoryPage = () => {
     // Logic: Agar categoryName 'search' hai, toh Search API hit karo
     if (categoryName === "search") {
       const searchParams = new URLSearchParams(location.search);
-      const query = searchParams.get("q"); // URL se 'q' ki value nikalega
-      fetchUrl = `http://localhost:5000/api/items/search?q=${query}`;
+      const query = searchParams.get("q"); 
+      // Ab yahan hardcoded localhost ki jagah API_BASE_URL use hoga
+      fetchUrl = `${API_BASE_URL}/items/search?q=${query}`;
     } else {
-      // Normal Category fetch
-      fetchUrl = `http://localhost:5000/api/items?category=${categoryName}`;
+      // Normal Category fetch mein bhi API_BASE_URL use karein
+      fetchUrl = `${API_BASE_URL}/items?category=${categoryName}`;
     }
 
     fetch(fetchUrl)
@@ -34,7 +40,7 @@ const CategoryPage = () => {
         console.error("Fetch error:", err);
         setLoading(false);
       });
-  }, [categoryName, location.search]); 
+  }, [categoryName, location.search, API_BASE_URL]); // Dependency mein API_BASE_URL add kar diya
 
   return (
     <main>

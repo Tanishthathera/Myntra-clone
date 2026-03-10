@@ -13,7 +13,7 @@ const FetchItems = () => {
 
   useEffect(() => {
     if (fetchStatus?.fetchDone) {
-      console.log("🚀 Data already fetched, skipping API call.");
+      console.log(" Data already fetched, skipping API call.");
       return;
     }
 
@@ -34,7 +34,7 @@ const FetchItems = () => {
         }
 
         const data = await response.json();
-        console.log("📦 API Response:", data); // Debugging print
+        console.log(" API Response:", data); // Debugging print
 
         // Ensure the received data is in the expected format
         const itemsArray = data?.items ?? data; // Handle both formats
@@ -47,12 +47,12 @@ const FetchItems = () => {
         dispatch(fetchStatusActions.markFetchingFinished());
         dispatch(itemsActions.addInitialItems(itemsArray));
 
-        console.log("✅ Data fetched successfully:", itemsArray);
+        console.log(" Data fetched successfully:", itemsArray);
       } catch (error) {
         if (error.name === "AbortError") {
-          console.warn("⚠️ Fetch request was aborted.");
+          console.warn(" Fetch request was aborted.");
         } else {
-          console.error("❌ Error fetching data:", error);
+          console.error(" Error fetching data:", error);
           dispatch(fetchStatusActions.markFetchingFinished()); // Ensure fetch is marked as finished
         }
       }
