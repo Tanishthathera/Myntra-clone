@@ -1,17 +1,30 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+//import { useState } from "react";
 import { bagActions } from "../store/bagSlice";
+import toast from 'react-hot-toast'; 
 
 const BagSummary = () => {
   const dispatch = useDispatch();
-  const bagItems = useSelector((state) => state.bag); // [{id, quantity}]
+  const bagItems = useSelector((state) => state.bag);
   const items = useSelector((state) => state.items);
-  
-  const [showPopup, setShowPopup] = useState(false);
-  const [showEmptyCartPopup, setShowEmptyCartPopup] = useState(false);
-  const [showPaymentErrorPopup, setShowPaymentErrorPopup] = useState(false);
 
-  //Items ko unki quantity ke saath map karein
+  // Myntra Theme Styles for Toast
+  const toastStyle = {
+    style: {
+      border: '1px solid #ff3f6c',
+      padding: '16px',
+      color: '#ff3f6c',
+      fontWeight: 'bold',
+      borderRadius: '8px',
+      background: '#fff',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+    },
+    iconTheme: {
+      primary: '#ff3f6c',
+      secondary: '#fff',
+    },
+  };
+
   const finalItems = items
     .filter((item) => bagItems.some(bagItem => bagItem.id === item._id))
     .map(item => {
@@ -22,7 +35,6 @@ const BagSummary = () => {
   const CONVENIENCE_FEES = 99;
   let totalMRP = 0, totalDiscount = 0;
 
-  // Quantity se multiply karein
   finalItems.forEach((bagItem) => {
     totalMRP += (bagItem.original_price * bagItem.quantity);
     totalDiscount += (bagItem.original_price - bagItem.current_price) * bagItem.quantity;
@@ -46,37 +58,36 @@ const BagSummary = () => {
 
   const handlePlaceOrder = async () => {
     if (bagItems.length === 0) {
-      setShowEmptyCartPopup(true);
-      setTimeout(() => setShowEmptyCartPopup(false), 4500);
+      toast.error("Cart is Empty!", toastStyle); // 👈 Stylish Empty Cart
       return;
     }
 
     try {
-    const checkStockRes = await fetch(`${API_BASE_URL}/orders/check-stock`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        cartItems: finalItems.map(item => ({ 
-           id: item._id,
-           quantity: item.quantity,
-           item_name: item.item_name 
-          })) 
-      }),
-    });
-    
-    const stockData = await checkStockRes.json();
-    if (!stockData.success) {
-      alert(stockData.message); // Yahan user ko pehle hi rok do
+      const checkStockRes = await fetch(`${API_BASE_URL}/orders/check-stock`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          cartItems: finalItems.map(item => ({ 
+             id: item._id,
+             quantity: item.quantity,
+             item_name: item.item_name 
+            })) 
+        }),
+      });
+      
+      const stockData = await checkStockRes.json();
+      if (!stockData.success) {
+        toast.error(stockData.message, toastStyle); // 👈 Stylish Stock Out (Jo aapko chahiye tha)
+        return;
+      }
+    } catch (err) {
+      toast.error("Stock check failed. Try again.", toastStyle);
       return;
     }
-  } catch (err) {
-    alert("Stock check failed. Try again.");
-    return;
-  }
 
     const res = await loadRazorpayScript();
     if (!res) {
-      alert("Razorpay SDK failed to load.");
+      toast.error("Razorpay SDK failed to load.", toastStyle);
       return;
     }
 
@@ -102,11 +113,10 @@ const BagSummary = () => {
         order_id: orderData.id,
         handler: async function (response) {
           try {
-            // Backend ko quantity bhi bhejein
             const itemsToVerify = finalItems.map(item => ({
               id: item._id, 
               item_name: item.item_name,
-              quantity: item.quantity // Important for Redis decrBy
+              quantity: item.quantity 
             }));
 
             const verifyRes = await fetch(`${API_BASE_URL}/orders/verify`, {
@@ -123,28 +133,26 @@ const BagSummary = () => {
             const verifyData = await verifyRes.json();
 
             if (verifyRes.ok && verifyData.success) {
-              setShowPopup(true);
+              toast.success("Order Placed Successfully!", {
+                duration: 3000,
+                style: { background: '#4BB543', color: '#fff' }
+              }); // 👈 Stylish Success
               dispatch(bagActions.clearBag());
-              setTimeout(() => {
-              setShowPopup(false);
-              window.location.reload(); 
-            }, 2000);
+              setTimeout(() => { window.location.reload(); }, 2000);
             } else {
-              alert(verifyData.message || "Verification Failed");
+              toast.error(verifyData.message || "Verification Failed", toastStyle);
             }
           } catch (err) {
-            console.error("Verification Error:", err);
-            setShowPaymentErrorPopup(true);
+            toast.error("Payment Verification Error!", toastStyle);
           }
         },
-        theme: { color: "#e57a62" },
+        theme: { color: "#ff3f6c" },
       };
 
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (error) {
-      console.error("Payment Process Error:", error);
-      alert("Something went wrong!");
+      toast.error("Something went wrong!", toastStyle);
     }
   };
 
@@ -173,10 +181,6 @@ const BagSummary = () => {
       <button className="btn-place-order" onClick={handlePlaceOrder}>
         PLACE ORDER
       </button>
-
-      {showPopup && <div className="popup success"><p>Order Placed!</p></div>}
-      {showEmptyCartPopup && <div className="popup error"><p>Cart is Empty!</p></div>}
-      {showPaymentErrorPopup && <div className="popup error"><p>Payment Failed!</p></div>}
     </div>
   );
 };

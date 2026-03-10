@@ -13,6 +13,11 @@ const itemSchema = new mongoose.Schema({
     stars: Number,
     count: Number,
   },
+  category: {
+     type: String,
+     required: true, 
+     default: "Men" 
+    },
   stock: {type: Number, default: 100 },
 });
 

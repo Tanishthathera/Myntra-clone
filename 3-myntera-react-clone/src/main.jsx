@@ -8,6 +8,12 @@ import App from "./routes/App.jsx";
 import Bag from "./routes/Bag.jsx";
 import { Provider } from "react-redux";
 import myntraStore from "./store/index.js";
+import CategoryPage from "./routes/CategoryPage.jsx";
+import AdminAddProduct from "./routes/AdminAddProduct.jsx";
+import Wishlist from "./routes/Wishlist";
+import { GiftCard, MyntraInsider } from "./routes/StaticPages.jsx";
+import LegalPage from "./routes/LegalPage.jsx";
+import Login from "./routes/Login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +25,13 @@ const router = createBrowserRouter([
         path: "/bag",
         element: <Bag />,
       },
+      { path: "/category/:categoryName", element: <CategoryPage /> },
+      { path: "/wishlist", element: <Wishlist /> },
+      { path: "/gift-cards", element: <GiftCard /> }, 
+      { path: "/insider", element: <MyntraInsider /> },
+      { path: "/admin-add", element: <AdminAddProduct /> },
+      { path: "/page/:pageName", element: <LegalPage /> },
+      { path: "/login", element: <Login /> },
     ],
   },
 ]);

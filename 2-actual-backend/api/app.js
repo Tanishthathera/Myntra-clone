@@ -89,12 +89,27 @@ connectDB();
 // Import routes
 const itemsRouter = require("./routes/items");
 const ordersRouter = require("./routes/orders");
+const wishlistRouter = require("./routes/wishlist");
 
 // API Routes
 console.log("Routes Loading...");
 app.use("/api/items", itemsRouter);
 app.use("/api/orders", ordersRouter);
 console.log("Routes Loaded Successfully!");
+app.use("/api/wishlist", wishlistRouter);
+
+app.post('/api/login', async (req, res) => {
+  const { email } = req.body;
+  // Abhi ke liye hum dummy user bhej rahe hain
+  if (email) {
+    res.status(200).json({
+      success: true,
+      user: { name: "User", email: email }
+    });
+  } else {
+    res.status(400).json({ success: false, message: "Email is required" });
+  }
+});
 
 app.get("/", (req, res) => {
   res.send("Myntra Backend is Live ");

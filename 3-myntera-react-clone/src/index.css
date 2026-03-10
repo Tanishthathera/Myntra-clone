@@ -7,11 +7,98 @@
 header {
   display: flex;
   background-color: #ffffff;
-  height: 80px;
+  min-height: 80px;
+  height: auto;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #b6b1b1;
+  padding: 0 4%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
+
+/* --- Final Mobile Header Fix --- */
+@media (max-width: 1002px) {
+  header {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between !important;
+    padding: 10px 4% !important;
+    height: auto !important;
+  }
+
+  /* 1. Hamburger aur Logo ko ek saath left mein lane ke liye container logic */
+  .logo_container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    order: 1 !important;
+    flex: 0 0 auto !important;
+    margin-right: auto !important; /* Ye icons ko right mein rakhega */
+    margin-left: 0 !important;
+  }
+
+  .toggle-sidebar {
+    display: block !important;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #282c3f;
+    padding: 0;
+  }
+
+  .myntra_home {
+    height: 32px !important; /* Mobile par logo chhota */
+  }
+
+  /* 2. Action bar (Profile, Bag) ko right mein set karein */
+  .action_bar {
+   order: 2 !important;
+    flex: 0 0 auto !important;
+    gap: 15px !important;
+    height: auto !important;
+  }
+  
+  .action_container {
+    min-width: unset !important;
+  }
+
+  /* 3. Search Bar ko full width karke 2nd line mein bhejein */
+  .search_bar {
+    order: 3 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 15px 0 5px 0 !important;
+    position: static !important;
+    transform: none !important;
+  }
+
+  .nav_bar {
+    display: none !important;
+  }
+
+  .sidebar {
+    z-index: 9999 !important; /* Sabse upar dikhne ke liye */
+  }
+}
+
+@media (max-width: 600px) {
+  .action_name {
+    display: none; /* Phone par sirf icons dikhenge, text nahi */
+  }
+  
+  .bag-page {
+    flex-direction: column;
+    max-width: 95%;
+  }
+
+  .bag-item-container {
+    padding: 10px;
+  }
+}
+
 .myntra_home {
   height: 45px;
 }
@@ -21,8 +108,9 @@ header {
 
 .nav_bar {
   display: flex;
-  width: 100%;
-  justify-content: space-evenly;
+  flex-grow: 1;
+  justify-content: center;
+  gap: 20px;
 }
 
 .nav_bar a {
@@ -45,14 +133,13 @@ header {
 }
 
 .search_bar {
-  height: 40px;
-  min-width: 200px;
-  width: 30%;
+  flex-grow: 1;
+  max-width: 500px;
+  margin: 0 20px;
   display: flex;
   align-items: center;
-  margin-right: 20px; 
-  position: relative; 
-  z-index: 5; 
+  position: relative;
+  background-color: #f5f5f6;
 }
 @media (max-width: 560px) {
   /* Search bar neeche center me lana */
@@ -65,6 +152,14 @@ header {
     z-index: 10; 
   }
  }
+ @media (max-width: 600px) {
+  .search_bar {
+    order: 3; /* Mobile par niche line mein lane ke liye */
+    width: 100%;
+    max-width: 100%;
+    margin: 10px 0;
+  }
+}
  @media (max-width: 1340px) {
   .search_bar {
     width: 40%;  
@@ -72,9 +167,8 @@ header {
   }
 }
 .search_icon {
-  box-sizing: content-box;
-  height: 20px;
   padding: 10px;
+  color: #282c3f;
 
   background-color: #f5f5f6;
   color: #282c3f;
@@ -82,32 +176,45 @@ header {
   border-radius: 4px 0 0 4px;
 }
 .search_input {
-  color: #696e79;
-  background-color: #f5f5f6;
+  background: transparent;
   flex-grow: 1;
   height: 40px;
   border: 0;
-  border-radius: 0 4px 4px 0;
+  outline: none;
+  padding: 5px;
 }
 
 .action_bar {
   display: flex;
-  width: 250px;
-  justify-content: space-evenly;
-  gap: 20px;
   align-items: center;
-  margin-right: 4%;
+  justify-content: flex-end;
+  gap: 20px;
+  height: 80px;
 }
-
 .action_container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative; 
-} 
-.action_container {
+  justify-content: center;
   text-decoration: none;
+  color: #282c3f;
+  min-width: 60px;
+  position: relative;
+  cursor: pointer;
 }
+
+.action_container svg, 
+.action_container .material-symbols-outlined {
+  font-size: 22px; 
+  color: #282c3f;
+  margin-bottom: 2px;/* Icon aur text ke beech thoda gap */
+}
+
+.action_name {
+  font-size: 12px;
+  font-weight: 700;
+}
+
 a.action_container:link {
   color:black;
 }
@@ -145,10 +252,11 @@ a.action_container:link {
 }
 
 .footer_container {
-  padding: 30px 0px 40px 0px;
-  background: #FAFBFC;
   display: flex;
-  justify-content: space-evenly;
+  flex-wrap: wrap; 
+  justify-content: space-between;
+  padding: 40px 10%;
+  gap: 30px;
 }
 
 .footer_column {
@@ -163,9 +271,10 @@ a.action_container:link {
 }
 
 .footer_column a {
-  color: #696b79;
-  font-size: 15px;
   text-decoration: none;
+  color: #696b79;
+  display: block;
+  font-size: 15px;
   padding-bottom: 5px;
 }
 
@@ -179,18 +288,38 @@ a.action_container:link {
   padding: 15px;
 }
 
+@media (max-width: 768px) {
+  .footer_container {
+    flex-direction: column; /* Mobile par ek ke niche ek */
+  }
+}
+
+/* --- 5. Search Bar Mobile Fix --- */
+@media (max-width: 1002px) {
+  .search_bar {
+    order: 3; 
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
 .items-container {
-  width: 80%;
-  margin: 40px 10%;
+  width: 85%;
+  margin: 40px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 .item-container {
-  width: 100%;
-  max-width: 250px;
+  width: 250px;
   margin: 10px;
 }
 .item-image {
   width: 100%;
 }
+.stock-low { color: #ff3f6c; font-weight: 700; font-size: 12px; }
+.stock-available { color: #03a685; font-size: 12px; }
+
 .rating {
   font-size: 12px;
   font-weight: 700;
@@ -255,43 +384,44 @@ a.action_container:link {
   cursor: pointer;
 }
 .bag-item-count {
-  background-color: #f16565;
-  white-space: nowrap;
-  text-align: center;
-  line-height: 18px;
-  padding: 0 6px;
-  height: 18px;
-  position:absolute;
-  border-radius: 50%;
-  font-size: 12px;
+  background-color: #ff3f6c; /* Myntra ka signature pink/red */
   color: #fff;
-  left: 13px;
-  top: -8px;
+  position: absolute;
+  top: -5px; /* Icon ke upar */
+  right: 8px; /* Icon ke right mein */
+  border-radius: 50%;
+  padding: 0 5px;
+  font-size: 11px;
   font-weight: 700;
-  cursor: pointer;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
-.bag-items-container {
-  display: inline-block;
-  width: 65%;
-  max-width: 100%;
-  padding-right: 10px;
-  border-right: 1px solid #eaeaec;
-  padding-top: 32px;
-  color: #282c3f;
-  font-size: 13px;
-  line-height: 1.42857143;
-  margin-top: 30px; 
+.bag-item-count {
+  background-color: #ff3f6c;
+  color: #fff;
+  position: absolute;
+  top: -5px;
+  right: 5px;
+  border-radius: 50%;
+  padding: 0 5px;
+  font-size: 11px;
+  height: 18px;
+  min-width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bag-page {
   display: flex;
-  flex-direction: row; 
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
   max-width: 75%;
-  margin: 0 auto;
+  margin: 30px auto;
+  gap: 20px;
 }
 /* Small screens ke liye neeche lana */
 @media (max-width: 990px) {
@@ -309,6 +439,12 @@ a.action_container:link {
   .bag-summary {
     margin-top: 20px; /* Thoda gap dene ke liye */
   }
+}
+@media (max-width: 1002px) {
+  header { flex-wrap: wrap; }
+  .nav_bar { display: none; }
+  .search_bar { order: 3; width: 100%; max-width: 100%; margin: 10px 0; }
+  .bag-page { flex-direction: column; max-width: 95%; }
 }
 
 .bag-summary {
@@ -488,30 +624,6 @@ a.action_container:link {
   font-size: 24px;
   cursor: pointer;
 }
-@media (max-width: 1002px) {
-  
-  .toggle-sidebar {
-    display: block;
-    position: absolute;
-    left: 2%
-  }
-
-  
-  .logo_container {
-    position: absolute;
-    left: 20px 
-  }
-
- 
-}
-
-@media (min-width: 1003px) {
- 
-  .logo_container {
-    margin-left: 2%;
-    position: static;
-  }
-}
 
 
 .close-btn {
@@ -546,16 +658,17 @@ a.action_container:link {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.2); 
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(12px);
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  text-align: center;
-  width: 90%;
-  max-width: 400px;
-  animation: fadeIn 0.3s ease-in-out, fadeOut 0.3s ease-in-out 2.2s forwards;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -55%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
 }
 
 .popup-content {
@@ -669,4 +782,38 @@ a.action_container:link {
   font-size: 16px;
   font-weight: 700;
   color: #282c3f;
+}
+
+.profile_container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.profile_dropdown {
+  display: none;
+  position: absolute;
+  top: 80px;
+  right: -10px;
+  width: 280px;
+  background-color: #fff;
+  border: 1px solid #f5f5f6;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 24px 16px;
+  z-index: 1001;
+}
+.profile_container:hover .profile_dropdown {
+    display: block;
+}
+
+.btn_login {
+    display: block;
+    text-align: center;
+    border: 1px solid #eaeaec;
+    padding: 10px;
+    color: #ff3f6c;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 10px;
 }
