@@ -17,10 +17,22 @@ const BagItem = ({ item }) => {
     dispatch(bagActions.decreaseQuantity(item._id));
   };
 
+  // --- Live Dynamic Date Logic ---
+  // Ye function hamesha Order/View ke waqt ki fresh date calculate karega
+  const getDeliveryDate = () => {
+    const today = new Date();
+    today.setDate(today.getDate() + 7); // Aaj ki date + 7 din
+    return today.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
   return (
     <div className="bag-item-container">
       <div className="item-left-part">
-        <img className="bag-item-img" src={item.image} />
+        <img className="bag-item-img" src={item.image} alt={item.item_name} />
       </div>
       <div className="item-right-part">
         <div className="company">{item.company}</div>
@@ -33,23 +45,25 @@ const BagItem = ({ item }) => {
           </span>
         </div>
         
-        {/* Quantity Controls */}
-        <div className="quantity-control">
-          <button className="qty-btn" onClick={handleDecrease}>-</button>
-          <span className="qty-amount">{item.quantity}</span>
-          <button className="qty-btn" onClick={handleIncrease}>+</button>
+        <div className="quantity-control" style={{ margin: '10px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button className="qty-btn" onClick={handleDecrease} style={{ padding: '2px 8px', cursor: 'pointer' }}>-</button>
+          <span className="qty-amount" style={{ fontWeight: 'bold' }}>{item.quantity || 1}</span>
+          <button className="qty-btn" onClick={handleIncrease} style={{ padding: '2px 8px', cursor: 'pointer' }}>+</button>
         </div>
 
         <div className="return-period">
-          <span className="return-period-days">{item.return_period} days</span> return available
+          {/* Constant 14 days kyunki policy hamesha same rehti hai */}
+          <span className="return-period-days">14 days</span> return available
         </div>
+        
         <div className="delivery-details">
           Delivery by
-          <span className="delivery-details-days"> {item.delivery_date}</span>
+          {/* Database ki purani date ko bypass karke hamesha dynamic date dikhana */}
+          <span className="delivery-details-days"> {getDeliveryDate()}</span>
         </div>
       </div>
 
-      <div className="remove-from-cart" onClick={handleRemoveItem}>
+      <div className="remove-from-cart" onClick={handleRemoveItem} style={{ cursor: 'pointer' }}>
         <RiDeleteBin5Line />
       </div>
     </div>

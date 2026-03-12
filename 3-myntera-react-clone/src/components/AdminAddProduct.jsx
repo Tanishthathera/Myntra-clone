@@ -6,29 +6,52 @@ const AdminAddProduct = () => {
     company: "",
     original_price: "",
     current_price: "",
-    category: "Men", // Default Category
+    category: "Men", 
     image: "",
-    stock: 50 // Default Stock
+    stock: 50 
   });
 
-  // --- Dynamic API URL Logic ---
   const API_BASE_URL = window.location.hostname === "localhost"
     ? "http://localhost:5000/api"
     : "https://myntra--backend.vercel.app/api";
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
+
+    // --- DYNAMIC DATA CALCULATION ---
+    // Aaj se 7 din baad ki date nikalne ke liye logic
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 7);
+    
+    const deliveryDateString = futureDate.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+
+    // Discount percentage khud calculate ho jaye
+    const discount = product.original_price > 0 
+      ? Math.round(((product.original_price - product.current_price) / product.original_price) * 100)
+      : 0;
+
+    // Final Data object jo backend jayega
+    const finalProductData = {
+      ...product,
+      discount_percentage: discount,
+      delivery_date: deliveryDateString, // Ab ye dynamic hai (e.g. 19 Mar 2026)
+      return_period: 14,                // Har naye product ke liye default 14 days
+      rating: { stars: 4.5, count: 0 }  // Default rating
+    };
+
     try {
-      // Localhost ko hata kar API_BASE_URL ka use kiya
       const res = await fetch(`${API_BASE_URL}/items`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(product),
+        body: JSON.stringify(finalProductData),
       });
       
       if (res.ok) {
-        alert("Product added to " + product.category + " successfully!");
-        // Form clear karne ke liye (Optional)
+        alert(`Success! Product added with Delivery Date: ${deliveryDateString}`);
         setProduct({ item_name: "", company: "", original_price: "", current_price: "", category: "Men", image: "", stock: 50 });
       } else {
         alert("Failed to add product. Please check backend.");
@@ -41,7 +64,7 @@ const AdminAddProduct = () => {
 
   return (
     <div className="admin-container">
-      <h2>Add New Product</h2>
+      <h2 style={{textAlign: 'center', marginBottom: '20px'}}>Add New Product (with Auto-Date)</h2>
       <form onSubmit={handleAddProduct}>
         <input 
           type="text" 
@@ -73,18 +96,17 @@ const AdminAddProduct = () => {
             placeholder="Original Price" 
             required 
             value={product.original_price}
-            onChange={(e) => setProduct({...product, original_price: e.target.value})} 
+            onChange={(e) => setProduct({...product, original_price: Number(e.target.value)})} 
           />
           <input 
             type="number" 
             placeholder="Current Price" 
             required 
             value={product.current_price}
-            onChange={(e) => setProduct({...product, current_price: e.target.value})} 
+            onChange={(e) => setProduct({...product, current_price: Number(e.target.value)})} 
           />
         </div>
 
-        {/* Category Dropdown */}
         <select value={product.category} onChange={(e) => setProduct({...product, category: e.target.value})}>
           <option value="Men">Men</option>
           <option value="Women">Women</option>
