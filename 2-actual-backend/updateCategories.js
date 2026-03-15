@@ -37,7 +37,7 @@ async function runUpdate() {
         cat = "Kids";
       } else if (name.includes("deodrant") || name.includes("perfume") || name.includes("lipstick") || name.includes("makeup") || name.includes("cream")) {
         cat = "Beauty";
-      } else if (name.includes("curtain") || name.includes("bedsheet") || name.includes("towel") || name.includes("cushion") || name.includes("storage") || name.includes("lamp") || name.includes("bottle") || name.includes("clock")) {
+      } else if (name.includes("curtain") || name.includes("bedsheet") || name.includes("towel") || name.includes("cushion") || name.includes("storage") || name.includes("lamp") || name.includes("bottle") || name.includes("clock") || name.includes("crockery")) {
         cat = "Home & Living";
       } else if (name.includes("trending")) {
         cat = "Studio"; 
