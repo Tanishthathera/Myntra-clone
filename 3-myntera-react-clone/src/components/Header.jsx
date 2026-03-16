@@ -59,12 +59,12 @@ const Header = () => {
       {/* 3. Desktop Navigation */}
       {!isMobile && (
         <nav className="nav_bar">
-          <Link className="nav_link" to="/category/Men">Men</Link>
-          <Link className="nav_link" to="/category/Women">Women</Link>
-          <Link className="nav_link" to="/category/Kids">Kids</Link>
-          <Link className="nav_link" to="/category/Home">Home & Living</Link>
-          <Link className="nav_link" to="/category/Beauty">Beauty</Link>
-          <Link className="nav_link" to="#">Studio <sup>New</sup></Link>
+          <Link className="nav_link" to="/category/men">Men</Link>
+          <Link className="nav_link" to="/category/women">Women</Link>
+          <Link className="nav_link" to="/category/kids">Kids</Link>
+          <Link className="nav_link" to="/category/home-living">Home & Living</Link>
+          <Link className="nav_link" to="/category/beauty">Beauty</Link>
+          <Link className="nav_link" to="/category/studio">Studio <sup>New</sup></Link>
         </nav>
       )}
 
